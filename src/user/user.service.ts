@@ -5,7 +5,10 @@ export class UserService {
 
 
 
+Hola(){
 
+    return "hola"
+}
 
 
 }
