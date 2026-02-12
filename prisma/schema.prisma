@@ -5,12 +5,15 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+//  engineType="binary"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+ 
 }
 
 //usuarios,roles y libros guardados xd
@@ -23,8 +26,14 @@ model User {
   role Role @default(USER)
   saves SavedBook[]
 }
+enum Role{
+USER 
+ADMIN
+SUPERADMIN
+}
 
-model Books{
+
+model Book{
 id Int @default(autoincrement()) @id
 title String
 description String?
@@ -36,26 +45,19 @@ savedby SavedBook[]
 
 }
 
-model SavedBook{
-id Int @default(autoincrement()) @id
-saveeAt DateTime @default(now())
+model SavedBook {
+  id        Int      @default(autoincrement()) @id
+  saveeAt   DateTime @default(now())
 
-books    Books   @relation(fields: [bookId], references: [id])
-bookId  Int
+  book      Book     @relation(fields: [bookId], references: [id]) // Cambiado a singular
+  bookId    Int
 
-  user    User     @relation(fields: [userId], references: [id])
-  userId  Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
 
-
- @@unique([userId, bookId])
-
+  @@unique([userId, bookId])
 }
 
-enum Role{
-USER 
-ADMIN
-SUPERADMIN
-}
 
 
 //inventario
