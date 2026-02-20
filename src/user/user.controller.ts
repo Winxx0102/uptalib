@@ -10,20 +10,20 @@ import { GetUser } from '../auth/decorators/get-user.decorator';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // Registro público
+
   @Post('register')
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  // Ver mi propio perfil y mis libros guardados
+
   @Get('profile')
   @UseGuards(JwtAuthGuard)
   getProfile(@GetUser('userId') userId: number) {
     return this.usersService.findOne(userId);
   }
 
-  // Solo el Superadmin puede cambiar roles de otros usuarios
+
   @Patch('role/:id')
   @Roles(Role.SUPERADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)

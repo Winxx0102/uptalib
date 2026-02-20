@@ -8,9 +8,7 @@ import { Role } from '@prisma/client'; // Importamos el enum real de Prisma
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  /**
-   * CREACIÓN DE USUARIO (Registro)
-   */
+
   async create(createUserDto: CreateUserDto) {
     const { email, password, name, role } = createUserDto;
 
@@ -41,18 +39,14 @@ export class UsersService {
     });
   }
 
-  /**
-   * BUSCAR POR EMAIL
-   */
+
   async findByEmail(email: string) {
     return this.prisma.user.findUnique({
       where: { email },
     });
   }
 
-  /**
-   * ACTUALIZAR ROL (Solo SuperAdmin)
-   */
+ 
   async updateRole(id: number, newRole: Role) { // Cambiamos 'any' por 'Role'
     try {
       return await this.prisma.user.update({
@@ -69,9 +63,7 @@ export class UsersService {
     }
   }
 
-  /**
-   * OBTENER PERFIL
-   */
+ 
   async findOne(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { id },
@@ -90,4 +82,4 @@ export class UsersService {
     const { password, ...result } = user;
     return result;
   }
-} // <--- Aquí faltaba cerrar la clase
+} 

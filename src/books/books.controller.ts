@@ -4,6 +4,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'; // Crea un guard s
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '@prisma/client';
+import { CreateBookDto } from './dto/create-book.dto';
 
 @Controller('book')
 export class BookController {
@@ -16,9 +17,9 @@ export class BookController {
   }
 
   @Post() // Solo ADMIN sube libros
-  @Roles(Role.ADMIN)
+  @Roles(Role.SUPERADMIN, Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  create(@Body() data: any) {
+  create(@Body() data: CreateBookDto) {
     return this.bookService.create(data);
   }
 
