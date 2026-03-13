@@ -2,12 +2,13 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+  constructor(private prisma: PrismaService, private jwtService: JwtService) { }
 
-  async login(email: string, pass: string) {
+  async login(email: string, pass: string, res: Response) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new UnauthorizedException('Usuario no encontrado');
 
@@ -15,9 +16,20 @@ export class AuthService {
     if (!isMatch) throw new UnauthorizedException('Contraseña incorrecta');
 
     const payload = { sub: user.id, email: user.email, role: user.role };
+    const token = this.jwtService.sign(payload);
+
+    res.cookie('jwt', token, {
+      httpOnly: false,
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 360 * 60 * 1000,
+    })
+
+
     return {
-      access_token: this.jwtService.sign(payload),
-      user: { name: user.name, role: user.role }
+      state: 'success',
+      message: 'Login exitoso',
+
     };
   }
 }

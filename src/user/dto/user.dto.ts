@@ -20,8 +20,5 @@ export class CreateUserDto {
   @MinLength(6)
   password: string;
 
-  @IsEnum(Role, {
-    message: 'El rol debe ser: USER, ADMIN o SUPERADMIN',
-  })
-  role?: Role; 
+
 }

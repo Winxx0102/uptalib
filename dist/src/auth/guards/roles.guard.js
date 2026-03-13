@@ -22,12 +22,17 @@ let RolesGuard = class RolesGuard {
             context.getHandler(),
             context.getClass(),
         ]);
-        if (!requiredRoles)
+        if (!requiredRoles || requiredRoles.length === 0) {
             return true;
+        }
         const request = context.switchToHttp().getRequest();
-        const userRole = request.headers['role'];
+        const user = request.user;
+        if (!user) {
+            throw new common_1.ForbiddenException('No hay usuario autenticado');
+        }
+        const userRole = user.role;
         if (!requiredRoles.includes(userRole)) {
-            throw new common_1.ForbiddenException(`Se requiere el rol: ${requiredRoles}`);
+            throw new common_1.ForbiddenException(`Se requiere al menos uno de los siguientes roles: ${requiredRoles.join(', ')}. Tu rol actual: ${userRole}`);
         }
         return true;
     }

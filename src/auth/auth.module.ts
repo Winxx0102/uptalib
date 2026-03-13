@@ -5,20 +5,21 @@ import { UsersModule } from '../user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './estrategies/jwt.strategy';
+import { JWT_SECRET } from './constants/jwt';
 
 
 @Module({
   imports: [
     UsersModule,
     PassportModule,
-  // src/auth/auth.module.ts
-JwtModule.register({
-  secret: process.env.JWT_SECRET || 'secretKey', // Usa la variable de entorno
-  signOptions: { expiresIn: '24h' },
-}),
+    // src/auth/auth.module.ts
+    JwtModule.register({
+      secret: JWT_SECRET,
+      signOptions: { expiresIn: '1h' },
+    }),
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

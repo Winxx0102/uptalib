@@ -35,10 +35,4 @@ __decorate([
     (0, class_validator_1.MinLength)(6),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "password", void 0);
-__decorate([
-    (0, class_validator_1.IsEnum)(Role, {
-        message: 'El rol debe ser: USER, ADMIN o SUPERADMIN',
-    }),
-    __metadata("design:type", String)
-], CreateUserDto.prototype, "role", void 0);
 //# sourceMappingURL=user.dto.js.map

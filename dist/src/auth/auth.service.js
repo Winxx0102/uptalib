@@ -52,7 +52,7 @@ let AuthService = class AuthService {
         this.prisma = prisma;
         this.jwtService = jwtService;
     }
-    async login(email, pass) {
+    async login(email, pass, res) {
         const user = await this.prisma.user.findUnique({ where: { email } });
         if (!user)
             throw new common_1.UnauthorizedException('Usuario no encontrado');
@@ -60,9 +60,16 @@ let AuthService = class AuthService {
         if (!isMatch)
             throw new common_1.UnauthorizedException('Contraseña incorrecta');
         const payload = { sub: user.id, email: user.email, role: user.role };
+        const token = this.jwtService.sign(payload);
+        res.cookie('jwt', token, {
+            httpOnly: false,
+            secure: false,
+            sameSite: 'lax',
+            maxAge: 360 * 60 * 1000,
+        });
         return {
-            access_token: this.jwtService.sign(payload),
-            user: { name: user.name, role: user.role }
+            state: 'success',
+            message: 'Login exitoso',
         };
     }
 };

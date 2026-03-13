@@ -5,22 +5,22 @@ export declare class UsersService {
     private prisma;
     constructor(prisma: PrismaService);
     create(createUserDto: CreateUserDto): Promise<{
+        id: number;
         email: string;
         name: string;
         role: import(".prisma/client").$Enums.Role;
-        id: number;
     }>;
     findByEmail(email: string): Promise<{
+        id: number;
         email: string;
         name: string;
         password: string;
         role: import(".prisma/client").$Enums.Role;
-        id: number;
     }>;
     updateRole(id: number, newRole: Role): Promise<{
+        id: number;
         email: string;
         role: import(".prisma/client").$Enums.Role;
-        id: number;
     }>;
     findOne(id: number): Promise<{
         saves: ({
@@ -35,13 +35,13 @@ export declare class UsersService {
             };
         } & {
             id: number;
+            userId: number;
             saveeAt: Date;
             bookId: number;
-            userId: number;
         })[];
+        id: number;
         email: string;
         name: string;
         role: import(".prisma/client").$Enums.Role;
-        id: number;
     }>;
 }

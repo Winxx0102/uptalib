@@ -2,19 +2,34 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
+import { JWT_SECRET } from '../constants/jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request) => {
+          // Verificamos si existe la cookie 'jwt'
+          const token = request.cookies?.jwt;
+
+          // SI NO HAY COOKIE, RETORNAMOS NULL
+          // Esto hace que Passport falle la autenticación inmediatamente ("chao")
+          if (!token) {
+            return null;
+          }
+
+          return token;
+        }
+      ]),
       ignoreExpiration: false,
-      secretOrKey: 'TU_CLAVE_SECRETA_SUPER_SEGURA', 
+      secretOrKey: JWT_SECRET,
     });
   }
 
   async validate(payload: JwtPayload) {
-    // Lo que devuelvas aquí se inyectará en req.user
+    // Si llegamos aquí, es porque SÍ había cookie y era válida
     return { userId: payload.sub, email: payload.email, role: payload.role };
   }
+
 }

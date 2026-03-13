@@ -6,18 +6,24 @@ import { Role } from '@prisma/client'; // Importamos el enum real de Prisma
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
 
   async create(createUserDto: CreateUserDto) {
-    const { email, password, name, role } = createUserDto;
+    const { email, password, name } = createUserDto;
 
-    const existingUser = await this.prisma.user.findUnique({
-      where: { email },
+    const existingUser = await this.prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: email },
+          { name: name }
+        ]
+      }
+
     });
 
     if (existingUser) {
-      throw new ConflictException('El correo electrónico ya está registrado');
+      throw new ConflictException('Las credenciales están registradas');
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -28,7 +34,7 @@ export class UsersService {
         email,
         name,
         password: hashedPassword,
-        role: role, 
+        role: "USER",
       },
       select: {
         id: true,
@@ -46,7 +52,7 @@ export class UsersService {
     });
   }
 
- 
+
   async updateRole(id: number, newRole: Role) { // Cambiamos 'any' por 'Role'
     try {
       return await this.prisma.user.update({
@@ -63,21 +69,21 @@ export class UsersService {
     }
   }
 
- 
+
   async findOne(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
         saves: {
           include: {
-            book: true, 
+            book: true,
           },
         },
       },
     });
 
     if (!user) throw new NotFoundException('Usuario no encontrado');
-    
+
     // Eliminamos la contraseña del objeto antes de retornar por si acaso
     const { password, ...result } = user;
     return result;

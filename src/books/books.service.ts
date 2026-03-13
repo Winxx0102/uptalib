@@ -3,7 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class BookService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async findAll() {
     return this.prisma.book.findMany();
@@ -38,7 +38,7 @@ export class BookService {
         book: true, // Asegúrate que en el schema diga 'book' y no 'books'
       },
     });
-    
+
     return userLibrary.map((item) => item.book);
   }
 }

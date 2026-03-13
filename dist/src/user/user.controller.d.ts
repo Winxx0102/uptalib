@@ -4,10 +4,10 @@ export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
     create(createUserDto: CreateUserDto): Promise<{
+        id: number;
         email: string;
         name: string;
         role: import(".prisma/client").$Enums.Role;
-        id: number;
     }>;
     getProfile(userId: number): Promise<{
         saves: ({
@@ -22,18 +22,18 @@ export declare class UsersController {
             };
         } & {
             id: number;
+            userId: number;
             saveeAt: Date;
             bookId: number;
-            userId: number;
         })[];
+        id: number;
         email: string;
         name: string;
         role: import(".prisma/client").$Enums.Role;
-        id: number;
     }>;
     updateRole(id: number, role: Role): Promise<{
+        id: number;
         email: string;
         role: import(".prisma/client").$Enums.Role;
-        id: number;
     }>;
 }

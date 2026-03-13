@@ -51,12 +51,17 @@ let UsersService = class UsersService {
         this.prisma = prisma;
     }
     async create(createUserDto) {
-        const { email, password, name, role } = createUserDto;
-        const existingUser = await this.prisma.user.findUnique({
-            where: { email },
+        const { email, password, name } = createUserDto;
+        const existingUser = await this.prisma.user.findFirst({
+            where: {
+                OR: [
+                    { email: email },
+                    { name: name }
+                ]
+            }
         });
         if (existingUser) {
-            throw new common_1.ConflictException('El correo electrónico ya está registrado');
+            throw new common_1.ConflictException('Las credenciales están registradas');
         }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -65,7 +70,7 @@ let UsersService = class UsersService {
                 email,
                 name,
                 password: hashedPassword,
-                role: role,
+                role: "USER",
             },
             select: {
                 id: true,
