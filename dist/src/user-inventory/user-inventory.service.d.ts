@@ -4,27 +4,27 @@ export declare class UserInventoryService {
     private prisma;
     constructor(prisma: PrismaService);
     create(createUserInventoryDto: CreateUserInventoryDto): Promise<{
-        id: number;
         name: string;
         lastname: string;
         cedula: number;
+        id: number;
     }>;
     findAll(): Promise<{
-        id: number;
         name: string;
         lastname: string;
         cedula: number;
+        id: number;
     }[]>;
     findOne(id: number): Promise<{
-        id: number;
         name: string;
         lastname: string;
         cedula: number;
+        id: number;
     }>;
     remove(id: number): Promise<{
-        id: number;
         name: string;
         lastname: string;
         cedula: number;
+        id: number;
     }>;
 }

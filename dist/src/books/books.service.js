@@ -16,11 +16,34 @@ let BookService = class BookService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async findAll() {
-        return this.prisma.book.findMany();
+    async findAll(query) {
+        const take = parseInt(query.limit) || 10;
+        const search = query.search;
+        const where = {};
+        if (search) {
+            where.OR = [
+                {
+                    title: { contains: search },
+                },
+                {
+                    description: { contains: search }
+                }
+            ];
+        }
+        return this.prisma.book.findMany({
+            take,
+            where,
+        });
     }
     async create(data) {
-        return this.prisma.book.create({ data });
+        const book = await this.prisma.book.create({ data });
+        return { message: 'Libro Creado', book };
+    }
+    async delete(id) {
+        return { book: await this.prisma.book.delete({ where: { id } }), message: 'Libro Eliminado' };
+    }
+    async edit(id, data) {
+        return { book: await this.prisma.book.update({ where: { id }, data: data }), message: 'Libro editado' };
     }
     async saveToUser(userId, bookId) {
         const book = await this.prisma.book.findUnique({ where: { id: bookId } });

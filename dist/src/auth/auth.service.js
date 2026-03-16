@@ -65,7 +65,7 @@ let AuthService = class AuthService {
             httpOnly: false,
             secure: false,
             sameSite: 'lax',
-            maxAge: 360 * 60 * 1000,
+            maxAge: 12 * 60 * 60 * 1000,
         });
         return {
             state: 'success',

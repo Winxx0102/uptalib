@@ -17,7 +17,7 @@ let UserInventoryService = class UserInventoryService {
         this.prisma = prisma;
     }
     async create(createUserInventoryDto) {
-        return await this.prisma.userInventoy.create({
+        return await this.prisma.userInventory.create({
             data: {
                 name: createUserInventoryDto.name,
                 lastname: createUserInventoryDto.lastname,
@@ -26,17 +26,17 @@ let UserInventoryService = class UserInventoryService {
         });
     }
     async findAll() {
-        return await this.prisma.userInventoy.findMany();
+        return await this.prisma.userInventory.findMany();
     }
     async findOne(id) {
-        return await this.prisma.userInventoy.findUnique({
+        return await this.prisma.userInventory.findUnique({
             where: {
                 id,
             },
         });
     }
     async remove(id) {
-        return await this.prisma.userInventoy.delete({
+        return await this.prisma.userInventory.delete({
             where: {
                 id,
             },

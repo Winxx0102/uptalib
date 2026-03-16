@@ -22,9 +22,9 @@ export declare class UsersController {
             };
         } & {
             id: number;
-            userId: number;
             saveeAt: Date;
             bookId: number;
+            userId: number;
         })[];
         id: number;
         email: string;

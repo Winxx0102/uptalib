@@ -1,19 +1,19 @@
 import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class CreateBookDto {
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: 'No puede estar vacío' })
+  @IsString({ message: 'Debe ser una cadena de texto' })
   title: string;
 
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'Debe ser una cadena de texto' })
   description?: string;
 
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: 'No puede estar vacío' })
+  @IsString({ message: 'Debe ser una cadena de texto' })
   routepdf: string; // O IsUrl() si es un link
 
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'Debe ser una cadena de texto' })
   routeimg?: string;
 }

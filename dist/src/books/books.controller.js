@@ -20,15 +20,22 @@ const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const client_1 = require("@prisma/client");
 const create_book_dto_1 = require("./dto/create-book.dto");
+const update_book_dto_1 = require("./dto/update-book.dto");
 let BookController = class BookController {
     constructor(bookService) {
         this.bookService = bookService;
     }
-    findAll() {
-        return this.bookService.findAll();
+    findAll(query) {
+        return this.bookService.findAll(query);
     }
     create(data) {
         return this.bookService.create(data);
+    }
+    delete(id) {
+        return this.bookService.delete(id);
+    }
+    edit(id, data) {
+        return this.bookService.edit(id, data);
     }
     save(req, bookId) {
         return this.bookService.saveToUser(req.user.userId, bookId);
@@ -41,8 +48,9 @@ exports.BookController = BookController;
 __decorate([
     (0, common_1.Get)(),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], BookController.prototype, "findAll", null);
 __decorate([
@@ -54,6 +62,25 @@ __decorate([
     __metadata("design:paramtypes", [create_book_dto_1.CreateBookDto]),
     __metadata("design:returntype", void 0)
 ], BookController.prototype, "create", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, roles_decorator_1.Roles)(client_1.Role.SUPERADMIN, client_1.Role.ADMIN),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], BookController.prototype, "delete", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    (0, roles_decorator_1.Roles)(client_1.Role.SUPERADMIN, client_1.Role.ADMIN),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, update_book_dto_1.UpdateBookDto]),
+    __metadata("design:returntype", void 0)
+], BookController.prototype, "edit", null);
 __decorate([
     (0, common_1.Post)('save/:bookId'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),

@@ -15,7 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.InventoryController = void 0;
 const common_1 = require("@nestjs/common");
 const inventory_service_1 = require("./inventory.service");
-const create_inventory_dto_1 = require("./dto/create-inventory.dto");
+const create_item_dto_1 = require("./dto/create-item-dto");
+const edit_item_dto_1 = require("./dto/edit-item-dto");
 let InventoryController = class InventoryController {
     constructor(inventoryService) {
         this.inventoryService = inventoryService;
@@ -23,17 +24,17 @@ let InventoryController = class InventoryController {
     create(createInventoryDto) {
         return this.inventoryService.create(createInventoryDto);
     }
-    findAll() {
-        return this.inventoryService.findAll();
+    findAll(query) {
+        return this.inventoryService.findAll(query);
     }
     findOne(id) {
         return this.inventoryService.findOne(+id);
     }
-    update(id, updateInventoryDto) {
-        return this.inventoryService.update(+id, updateInventoryDto);
+    edit(id, updateInventoryDto) {
+        return this.inventoryService.edit(+id, updateInventoryDto);
     }
-    remove(id) {
-        return this.inventoryService.remove(+id);
+    delete(id) {
+        return this.inventoryService.delete(+id);
     }
 };
 exports.InventoryController = InventoryController;
@@ -41,20 +42,21 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_inventory_dto_1.CreateInventoryDto]),
+    __metadata("design:paramtypes", [create_item_dto_1.CreateItemInventory]),
     __metadata("design:returntype", void 0)
 ], InventoryController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], InventoryController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], InventoryController.prototype, "findOne", null);
 __decorate([
@@ -62,16 +64,16 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [Number, edit_item_dto_1.EditItemInventory]),
     __metadata("design:returntype", void 0)
-], InventoryController.prototype, "update", null);
+], InventoryController.prototype, "edit", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
-], InventoryController.prototype, "remove", null);
+], InventoryController.prototype, "delete", null);
 exports.InventoryController = InventoryController = __decorate([
     (0, common_1.Controller)('inventory'),
     __metadata("design:paramtypes", [inventory_service_1.InventoryService])

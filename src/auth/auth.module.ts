@@ -15,7 +15,7 @@ import { JWT_SECRET } from './constants/jwt';
     // src/auth/auth.module.ts
     JwtModule.register({
       secret: JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '12h' },
     }),
   ],
   providers: [AuthService, JwtStrategy],

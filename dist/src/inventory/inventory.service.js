@@ -5,28 +5,51 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InventoryService = void 0;
 const common_1 = require("@nestjs/common");
+const prisma_service_1 = require("../../prisma/prisma.service");
 let InventoryService = class InventoryService {
-    create(createInventoryDto) {
-        return 'This action adds a new inventory';
+    constructor(prisma) {
+        this.prisma = prisma;
     }
-    findAll() {
-        return `This action returns all inventory`;
+    async create(createInventoryDto) {
+        return { item: await this.prisma.item.create({ data: createInventoryDto }), message: 'Item añadido' };
+    }
+    async findAll(query) {
+        const take = parseInt(query.limit) || 10;
+        const search = query.search;
+        const where = {};
+        if (search) {
+            where.OR = [
+                {
+                    name: { contains: search },
+                },
+                {
+                    description: { contains: search }
+                }
+            ];
+        }
+        return await this.prisma.item.findMany({ where, take });
     }
     findOne(id) {
-        return `This action returns a #${id} inventory`;
+        return `This action returns a #${id} inventorsyss`;
     }
-    update(id, updateInventoryDto) {
-        return `This action updates a #${id} inventory`;
+    async edit(id, updateInventoryDto) {
+        const item = await this.prisma.item.update({ where: { id: id }, data: updateInventoryDto });
+        return { message: 'Item actualizasdo' };
     }
-    remove(id) {
-        return `This action removes a #${id} inventory`;
+    async delete(id) {
+        const item = await this.prisma.item.delete({ where: { id: id } });
+        return { message: 'Item Eliminado' };
     }
 };
 exports.InventoryService = InventoryService;
 exports.InventoryService = InventoryService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], InventoryService);
 //# sourceMappingURL=inventory.service.js.map
