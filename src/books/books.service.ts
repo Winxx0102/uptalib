@@ -10,53 +10,12 @@ interface bookUpdate {
 @Injectable()
 export class BookService {
   constructor(private prisma: PrismaService) { }
-  // async findAll(dto: BookPaginationDto) {
-  //   const skip = (dto.page - 1) * dto.limit;
-  //   const take = dto.limit;
 
-  //   const where: any = {};
-  //   if (dto.search) {
-  //     where.OR = [
-  //       {
-  //         title: {
-  //           contains: dto.search,
 
-  //         }
-  //       },
-  //       {
-  //         description: {
-  //           contains: dto.search,
-
-  //         }
-  //       },
-  //     ];
-  //   }
-  //   const [totalItems, data] = await this.prisma.$transaction([
-
-  //     this.prisma.book.count({ where }),
-  //     this.prisma.book.findMany({
-  //       skip,
-  //       take,
-  //       where,
-  //       orderBy: {
-  //         id: 'asc'
-  //       },
-  //       select: {
-  //         id: true,
-  //         title: true,
-  //         description: true,
-  //         routepdf: true,
-  //         routeimg: true,
-
-  //       },
-  //     }),
-  //   ]);
-
-  //   return {
-  //     data,
-  //     count: totalItems,
-  //   };
-  // }
+  async findOne(id: number) {
+    const book = await this.prisma.book.findUnique({ where: { id } })
+    return book
+  }
 
   async findAll(query: any) {
     const take = parseInt(query.limit) || 10;
@@ -82,9 +41,9 @@ export class BookService {
 
 
   }
-  async create(data: book) {
+  async create(data: any) {
     const book = await this.prisma.book.create({ data })
-    return { message: 'Libro Creado', book };
+    return { message: 'Libro Creado' };
   }
 
   async delete(id: number) {

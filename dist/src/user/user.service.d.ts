@@ -26,8 +26,8 @@ export declare class UsersService {
         saves: ({
             book: {
                 id: number;
-                title: string;
                 description: string | null;
+                title: string;
                 routepdf: string;
                 routeimg: string | null;
                 createAt: Date;
@@ -35,9 +35,9 @@ export declare class UsersService {
             };
         } & {
             id: number;
+            userId: number;
             saveeAt: Date;
             bookId: number;
-            userId: number;
         })[];
         id: number;
         email: string;

@@ -1,10 +1,4 @@
 import { PrismaService } from '../../prisma/prisma.service';
-interface book {
-    title: string;
-    description?: string;
-    routepdf: string;
-    routeimg?: string;
-}
 interface bookUpdate {
     title?: string;
     description?: string;
@@ -14,6 +8,15 @@ interface bookUpdate {
 export declare class BookService {
     private prisma;
     constructor(prisma: PrismaService);
+    findOne(id: number): Promise<{
+        id: number;
+        title: string;
+        description: string | null;
+        routepdf: string;
+        routeimg: string | null;
+        createAt: Date;
+        updateAt: Date;
+    }>;
     findAll(query: any): Promise<{
         id: number;
         title: string;
@@ -23,17 +26,8 @@ export declare class BookService {
         createAt: Date;
         updateAt: Date;
     }[]>;
-    create(data: book): Promise<{
+    create(data: any): Promise<{
         message: string;
-        book: {
-            id: number;
-            title: string;
-            description: string | null;
-            routepdf: string;
-            routeimg: string | null;
-            createAt: Date;
-            updateAt: Date;
-        };
     }>;
     delete(id: number): Promise<{
         book: {

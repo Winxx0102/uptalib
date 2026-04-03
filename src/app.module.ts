@@ -4,9 +4,19 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './user/user.module';
 import { BooksModule } from './books/books.module';
 import { InventoryModule } from './inventory/inventory.module';
-
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path'
+import { MulterModule } from '@nestjs/platform-express';
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'public'), // Path to your local docs folder
+      serveRoot: '/public', // Optional: Files will be available at http://localhost:3000/docs
+    }),
+    MulterModule.register({
+      dest: '/public/uploads'
+    }),
+
     PrismaModule,
     AuthModule,
     UsersModule,

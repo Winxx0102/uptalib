@@ -16,6 +16,10 @@ let BookService = class BookService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async findOne(id) {
+        const book = await this.prisma.book.findUnique({ where: { id } });
+        return book;
+    }
     async findAll(query) {
         const take = parseInt(query.limit) || 10;
         const search = query.search;
@@ -37,7 +41,7 @@ let BookService = class BookService {
     }
     async create(data) {
         const book = await this.prisma.book.create({ data });
-        return { message: 'Libro Creado', book };
+        return { message: 'Libro Creado' };
     }
     async delete(id) {
         return { book: await this.prisma.book.delete({ where: { id } }), message: 'Libro Eliminado' };

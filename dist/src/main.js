@@ -11,7 +11,6 @@ async function bootstrap() {
     app.use(cookieParser());
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
-        forbidNonWhitelisted: true,
         transform: true,
     }));
     const config = new swagger_1.DocumentBuilder()

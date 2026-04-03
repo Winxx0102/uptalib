@@ -6,18 +6,18 @@ export declare class InventoryService {
     constructor(prisma: PrismaService);
     create(createInventoryDto: CreateItemInventory): Promise<{
         item: {
+            id: number;
             name: string;
             description: string | null;
             stock: number;
-            id: number;
         };
         message: string;
     }>;
     findAll(query: any): Promise<{
+        id: number;
         name: string;
         description: string | null;
         stock: number;
-        id: number;
     }[]>;
     findOne(id: number): string;
     edit(id: number, updateInventoryDto: EditItemInventory): Promise<{

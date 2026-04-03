@@ -13,12 +13,22 @@ const auth_module_1 = require("./auth/auth.module");
 const user_module_1 = require("./user/user.module");
 const books_module_1 = require("./books/books.module");
 const inventory_module_1 = require("./inventory/inventory.module");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
+const platform_express_1 = require("@nestjs/platform-express");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(process.cwd(), 'public'),
+                serveRoot: '/public',
+            }),
+            platform_express_1.MulterModule.register({
+                dest: '/public/uploads'
+            }),
             prisma_module_1.PrismaModule,
             auth_module_1.AuthModule,
             user_module_1.UsersModule,

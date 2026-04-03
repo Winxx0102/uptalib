@@ -4,21 +4,21 @@ export declare class UserInventoryController {
     private readonly userInventoryService;
     constructor(userInventoryService: UserInventoryService);
     create(createUserInventoryDto: CreateUserInventoryDto): Promise<{
+        id: number;
         name: string;
         lastname: string;
         cedula: number;
-        id: number;
     }>;
     findAll(): Promise<{
+        id: number;
         name: string;
         lastname: string;
         cedula: number;
-        id: number;
     }[]>;
     remove(id: string): Promise<{
+        id: number;
         name: string;
         lastname: string;
         cedula: number;
-        id: number;
     }>;
 }

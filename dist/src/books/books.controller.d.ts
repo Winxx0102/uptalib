@@ -1,5 +1,4 @@
 import { BookService } from './books.service';
-import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 export declare class BookController {
     private bookService;
@@ -13,17 +12,17 @@ export declare class BookController {
         createAt: Date;
         updateAt: Date;
     }[]>;
-    create(data: CreateBookDto): Promise<{
+    findOne(id: number): Promise<{
+        id: number;
+        title: string;
+        description: string | null;
+        routepdf: string;
+        routeimg: string | null;
+        createAt: Date;
+        updateAt: Date;
+    }>;
+    create(data: any, file: Express.Multer.File): Promise<{
         message: string;
-        book: {
-            id: number;
-            title: string;
-            description: string | null;
-            routepdf: string;
-            routeimg: string | null;
-            createAt: Date;
-            updateAt: Date;
-        };
     }>;
     delete(id: number): Promise<{
         book: {

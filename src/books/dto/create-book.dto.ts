@@ -9,9 +9,9 @@ export class CreateBookDto {
   @IsString({ message: 'Debe ser una cadena de texto' })
   description?: string;
 
-  @IsNotEmpty({ message: 'No puede estar vacío' })
-  @IsString({ message: 'Debe ser una cadena de texto' })
-  routepdf: string; // O IsUrl() si es un link
+  // @IsNotEmpty({ message: 'No puede estar vacío' })
+  // @IsString({ message: 'Debe ser una cadena de texto' })
+  // routepdf: string; // O IsUrl() si es un link
 
   @IsOptional()
   @IsString({ message: 'Debe ser una cadena de texto' })

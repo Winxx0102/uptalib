@@ -25,11 +25,6 @@ __decorate([
     __metadata("design:type", String)
 ], CreateBookDto.prototype, "description", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)({ message: 'No puede estar vacío' }),
-    (0, class_validator_1.IsString)({ message: 'Debe ser una cadena de texto' }),
-    __metadata("design:type", String)
-], CreateBookDto.prototype, "routepdf", void 0);
-__decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)({ message: 'Debe ser una cadena de texto' }),
     __metadata("design:type", String)

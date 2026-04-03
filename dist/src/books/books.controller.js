@@ -19,8 +19,11 @@ const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const client_1 = require("@prisma/client");
-const create_book_dto_1 = require("./dto/create-book.dto");
 const update_book_dto_1 = require("./dto/update-book.dto");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
+const path_1 = require("path");
+const crypto_1 = require("crypto");
 let BookController = class BookController {
     constructor(bookService) {
         this.bookService = bookService;
@@ -28,8 +31,12 @@ let BookController = class BookController {
     findAll(query) {
         return this.bookService.findAll(query);
     }
-    create(data) {
-        return this.bookService.create(data);
+    findOne(id) {
+        return this.bookService.findOne(id);
+    }
+    create(data, file) {
+        const filePath = `/public/uploads/pdf/${file.filename}`;
+        return this.bookService.create({ ...data, routepdf: filePath });
     }
     delete(id) {
         return this.bookService.delete(id);
@@ -54,12 +61,44 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], BookController.prototype, "findAll", null);
 __decorate([
+    (0, common_1.Get)(':id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], BookController.prototype, "findOne", null);
+__decorate([
     (0, common_1.Post)(),
     (0, roles_decorator_1.Roles)(client_1.Role.SUPERADMIN, client_1.Role.ADMIN),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileFieldsInterceptor)([
+        { name: 'pdf', maxCount: 1 },
+        { name: 'img', maxCount: 1 },
+    ], {
+        storage: (0, multer_1.diskStorage)({
+            destination: (req, file, cb) => {
+                if (file.mimetype.startsWith('image/')) {
+                    cb(null, './public/uploads/img');
+                }
+                else if (file.mimetype.includes('pdf')) {
+                    cb(null, './public/uploads/pdf');
+                }
+                else {
+                    cb(new Error('Tipo no permitido'), null);
+                }
+            },
+            filename: (req, file, cb) => {
+                const name = req.body.title || 'sin-nombre';
+                const uniqueSuffix = (0, crypto_1.randomUUID)();
+                cb(null, `${name}-${uniqueSuffix}${(0, path_1.extname)(file.originalname)}`);
+            },
+        }),
+    })),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_book_dto_1.CreateBookDto]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], BookController.prototype, "create", null);
 __decorate([
