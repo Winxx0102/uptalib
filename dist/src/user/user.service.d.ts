@@ -26,8 +26,8 @@ export declare class UsersService {
         saves: ({
             book: {
                 id: number;
-                description: string | null;
                 title: string;
+                description: string | null;
                 routepdf: string;
                 routeimg: string | null;
                 createAt: Date;

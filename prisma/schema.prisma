@@ -58,7 +58,7 @@ model SavedBook {
 
 //inventario
 
-model UserInventoy {
+model UserInventory {
   id       Int    @id @default(autoincrement())
   name     String
   lastname String
@@ -78,7 +78,7 @@ model Loan {
   id       Int @id @default(autoincrement())
   quantity Int @default(1)
 
-  userinventory   UserInventoy @relation(fields: [userInventoryId], references: [id])
+  userinventory   UserInventory @relation(fields: [userInventoryId], references: [id])
   userInventoryId Int
 
   item   Item @relation(fields: [itemId], references: [id])

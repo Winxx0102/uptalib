@@ -13,8 +13,8 @@ export declare class UsersController {
         saves: ({
             book: {
                 id: number;
-                description: string | null;
                 title: string;
+                description: string | null;
                 routepdf: string;
                 routeimg: string | null;
                 createAt: Date;
