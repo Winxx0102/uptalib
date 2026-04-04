@@ -36,7 +36,7 @@ export declare class BookController {
         };
         message: string;
     }>;
-    edit(id: number, data: UpdateBookDto): Promise<{
+    edit(id: number, data: UpdateBookDto, pdfFile: Express.Multer.File, imgFile: Express.Multer.File): Promise<{
         book: {
             id: number;
             title: string;
@@ -50,9 +50,9 @@ export declare class BookController {
     }>;
     save(req: any, bookId: number): Promise<{
         id: number;
-        userId: number;
         saveeAt: Date;
         bookId: number;
+        userId: number;
     }>;
     getMyLibrary(req: any): Promise<{
         id: number;

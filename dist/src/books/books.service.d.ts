@@ -55,9 +55,9 @@ export declare class BookService {
     }>;
     saveToUser(userId: number, bookId: number): Promise<{
         id: number;
-        userId: number;
         saveeAt: Date;
         bookId: number;
+        userId: number;
     }>;
     getSavedBook(userId: number): Promise<{
         id: number;
