@@ -1,23 +1,24 @@
 import { InventoryService } from './inventory.service';
-import { CreateItemInventory } from './dto/create-item-dto';
 import { EditItemInventory } from './dto/edit-item-dto';
 export declare class InventoryController {
     private readonly inventoryService;
     constructor(inventoryService: InventoryService);
-    create(createInventoryDto: CreateItemInventory): Promise<{
+    create(createInventoryDto: any, img: Express.Multer.File): Promise<{
         item: {
-            id: number;
             name: string;
             description: string | null;
             stock: number;
+            routeimg: string | null;
+            id: number;
         };
         message: string;
     }>;
     findAll(query: any): Promise<{
-        id: number;
         name: string;
         description: string | null;
         stock: number;
+        routeimg: string | null;
+        id: number;
     }[]>;
     findOne(id: number): string;
     edit(id: number, updateInventoryDto: EditItemInventory): Promise<{

@@ -35,8 +35,6 @@ export class BookController {
   @Roles(Role.SUPERADMIN, Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @UseInterceptors(FileInterceptor('pdf', storageFor1File))
-
-
   create(@Body() data: any, @UploadedFile() file: Express.Multer.File) {
     const filePath = `/public/uploads/pdf/${file.filename}`;
     return this.bookService.create({ ...data, routepdf: filePath });

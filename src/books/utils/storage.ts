@@ -18,7 +18,7 @@ export const storageFor1File = {
             }
         },
         filename: (req, file, cb) => {
-            const name = req.body.title || 'sin-nombre';
+            const name = (req.body.title || req.body.name) || 'sin-nombre';
             const uniqueSuffix = randomUUID(); // UUID v4
 
             cb(null, `${name}-${uniqueSuffix}${extname(file.originalname)}`);

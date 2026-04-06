@@ -21,7 +21,7 @@ exports.storageFor1File = {
             }
         },
         filename: (req, file, cb) => {
-            const name = req.body.title || 'sin-nombre';
+            const name = (req.body.title || req.body.name) || 'sin-nombre';
             const uniqueSuffix = (0, node_crypto_1.randomUUID)();
             cb(null, `${name}-${uniqueSuffix}${(0, node_path_1.extname)(file.originalname)}`);
         },

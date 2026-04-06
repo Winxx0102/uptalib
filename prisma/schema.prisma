@@ -71,6 +71,7 @@ model Item {
   name        String
   description String?
   stock       Int
+  routeimg    String?
   loans       Loan[]
 }
 

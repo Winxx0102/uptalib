@@ -8,7 +8,7 @@ import { EditItemInventory } from './dto/edit-item-dto';
 @Injectable()
 export class InventoryService {
   constructor(private prisma: PrismaService) { }
-  async create(createInventoryDto: CreateItemInventory) {
+  async create(createInventoryDto: any) {
     return { item: await this.prisma.item.create({ data: createInventoryDto }), message: 'Item añadido' };
   }
 

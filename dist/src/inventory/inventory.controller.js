@@ -15,13 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.InventoryController = void 0;
 const common_1 = require("@nestjs/common");
 const inventory_service_1 = require("./inventory.service");
-const create_item_dto_1 = require("./dto/create-item-dto");
 const edit_item_dto_1 = require("./dto/edit-item-dto");
+const platform_express_1 = require("@nestjs/platform-express");
+const storage_1 = require("../books/utils/storage");
 let InventoryController = class InventoryController {
     constructor(inventoryService) {
         this.inventoryService = inventoryService;
     }
-    create(createInventoryDto) {
+    create(createInventoryDto, img) {
+        createInventoryDto.stock = parseInt(createInventoryDto.stock);
+        if (img) {
+            const imgPath = `/public/uploads/img/${img.filename}`;
+            return this.inventoryService.create({ ...createInventoryDto, routeimg: imgPath });
+        }
         return this.inventoryService.create(createInventoryDto);
     }
     findAll(query) {
@@ -40,9 +46,11 @@ let InventoryController = class InventoryController {
 exports.InventoryController = InventoryController;
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('img', storage_1.storageFor1File)),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_item_dto_1.CreateItemInventory]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], InventoryController.prototype, "create", null);
 __decorate([

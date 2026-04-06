@@ -1,23 +1,24 @@
 import { PrismaService } from 'prisma/prisma.service';
-import { CreateItemInventory } from './dto/create-item-dto';
 import { EditItemInventory } from './dto/edit-item-dto';
 export declare class InventoryService {
     private prisma;
     constructor(prisma: PrismaService);
-    create(createInventoryDto: CreateItemInventory): Promise<{
+    create(createInventoryDto: any): Promise<{
         item: {
-            id: number;
             name: string;
             description: string | null;
             stock: number;
+            routeimg: string | null;
+            id: number;
         };
         message: string;
     }>;
     findAll(query: any): Promise<{
-        id: number;
         name: string;
         description: string | null;
         stock: number;
+        routeimg: string | null;
+        id: number;
     }[]>;
     findOne(id: number): string;
     edit(id: number, updateInventoryDto: EditItemInventory): Promise<{
