@@ -19,13 +19,10 @@ const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const roles_guard_1 = require("../auth/guards/roles.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const client_1 = require("@prisma/client");
-const update_book_dto_1 = require("./dto/update-book.dto");
 const platform_express_1 = require("@nestjs/platform-express");
-const multer_1 = require("multer");
-const path_1 = require("path");
-const crypto_1 = require("crypto");
 const fs_1 = require("fs");
-const path_2 = require("path");
+const path_1 = require("path");
+const storage_1 = require("./utils/storage");
 let BookController = class BookController {
     constructor(bookService) {
         this.bookService = bookService;
@@ -48,7 +45,7 @@ let BookController = class BookController {
         const filePaths = [book.routepdf, book.routeimg];
         filePaths.forEach((path) => {
             if (path) {
-                const fullPath = (0, path_2.join)(process.cwd(), path);
+                const fullPath = (0, path_1.join)(process.cwd(), path);
                 if ((0, fs_1.existsSync)(fullPath)) {
                     (0, fs_1.unlinkSync)(fullPath);
                 }
@@ -56,26 +53,23 @@ let BookController = class BookController {
         });
         return this.bookService.delete(id);
     }
-    async edit(id, data, pdfFile, imgFile) {
+    async edit(id, data, pdfFile) {
         const existingBook = await this.bookService.findOne(id);
         if (!existingBook) {
             throw new common_1.NotFoundException('El libro no existe');
         }
-        const filePaths = [existingBook.routepdf, existingBook.routeimg];
-        filePaths.forEach((path) => {
-            if (path) {
-                const fullPath = (0, path_2.join)(process.cwd(), path);
-                if ((0, fs_1.existsSync)(fullPath)) {
-                    (0, fs_1.unlinkSync)(fullPath);
-                }
-            }
-        });
-        const updateData = { ...data };
+        let updateData = data;
         if (pdfFile) {
-            updateData.routepdf = `/public/uploads/pdf/${pdfFile.filename}`;
-        }
-        if (imgFile) {
-            updateData.routeimg = `/public/uploads/img/${imgFile.filename}`;
+            const filePaths = [existingBook.routepdf];
+            filePaths.forEach((path) => {
+                if (path) {
+                    const fullPath = (0, path_1.join)(process.cwd(), path);
+                    if ((0, fs_1.existsSync)(fullPath)) {
+                        (0, fs_1.unlinkSync)(fullPath);
+                    }
+                }
+            });
+            updateData = { ...data, routepdf: `/public/uploads/pdf/${pdfFile.filename}` };
         }
         return this.bookService.edit(id, updateData);
     }
@@ -107,29 +101,7 @@ __decorate([
     (0, common_1.Post)(),
     (0, roles_decorator_1.Roles)(client_1.Role.SUPERADMIN, client_1.Role.ADMIN),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('pdf', {
-        limits: {
-            files: 1,
-        },
-        storage: (0, multer_1.diskStorage)({
-            destination: (req, file, cb) => {
-                if (file.mimetype.startsWith('image/')) {
-                    cb(null, './public/uploads/img');
-                }
-                else if (file.mimetype.includes('pdf')) {
-                    cb(null, './public/uploads/pdf');
-                }
-                else {
-                    cb(new Error('Tipo no permitido'), null);
-                }
-            },
-            filename: (req, file, cb) => {
-                const name = req.body.title || 'sin-nombre';
-                const uniqueSuffix = (0, crypto_1.randomUUID)();
-                cb(null, `${name}-${uniqueSuffix}${(0, path_1.extname)(file.originalname)}`);
-            },
-        }),
-    })),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('pdf', storage_1.storageFor1File)),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
@@ -149,38 +121,12 @@ __decorate([
     (0, common_1.Patch)(':id'),
     (0, roles_decorator_1.Roles)(client_1.Role.SUPERADMIN, client_1.Role.ADMIN),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileFieldsInterceptor)([
-        { name: 'pdf', maxCount: 1 },
-        { name: 'img', maxCount: 1 }
-    ], {
-        limits: {
-            files: 2,
-        },
-        storage: (0, multer_1.diskStorage)({
-            destination: (req, file, cb) => {
-                if (file.mimetype.startsWith('image/')) {
-                    cb(null, './public/uploads/img');
-                }
-                else if (file.mimetype.includes('pdf')) {
-                    cb(null, './public/uploads/pdf');
-                }
-                else {
-                    cb(new Error('Tipo no permitido'), null);
-                }
-            },
-            filename: (req, file, cb) => {
-                const name = req.body.title || 'sin-nombre';
-                const uniqueSuffix = (0, crypto_1.randomUUID)();
-                cb(null, `${name}-${uniqueSuffix}${(0, path_1.extname)(file.originalname)}`);
-            },
-        }),
-    })),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('pdf', storage_1.storageFor1File)),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
-    __param(2, (0, common_1.UploadedFile)('pdf')),
-    __param(3, (0, common_1.UploadedFile)('img')),
+    __param(2, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, update_book_dto_1.UpdateBookDto, Object, Object]),
+    __metadata("design:paramtypes", [Number, Object, Object]),
     __metadata("design:returntype", Promise)
 ], BookController.prototype, "edit", null);
 __decorate([

@@ -1,5 +1,4 @@
 import { BookService } from './books.service';
-import { UpdateBookDto } from './dto/update-book.dto';
 export declare class BookController {
     private bookService;
     constructor(bookService: BookService);
@@ -36,7 +35,7 @@ export declare class BookController {
         };
         message: string;
     }>;
-    edit(id: number, data: UpdateBookDto, pdfFile: Express.Multer.File, imgFile: Express.Multer.File): Promise<{
+    edit(id: number, data: any, pdfFile: Express.Multer.File): Promise<{
         book: {
             id: number;
             title: string;

@@ -10,15 +10,15 @@ import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestj
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { randomUUID, UUID } from 'crypto';
-import { existsSync , unlinkSync} from 'fs';
+import { existsSync, unlinkSync } from 'fs';
 import { join } from 'path';
+import { storageFor1File } from './utils/storage';
 @Controller('book')
 export class BookController {
   constructor(private bookService: BookService) { }
 
   @Get() // Todos los logueados ven
   @UseGuards(JwtAuthGuard)
-  // @UseInterceptors(PrismaPaginationInterceptor)
   findAll(@Query() query: any) {
     return this.bookService.findAll(query);
   }
@@ -30,33 +30,11 @@ export class BookController {
   }
 
 
-  
+
   @Post() // Solo ADMIN sube libros
   @Roles(Role.SUPERADMIN, Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @UseInterceptors(FileInterceptor( 'pdf',{
-    limits: {
-      files: 1, 
-    },
-    
-    storage: diskStorage({
-      destination: (req, file, cb) => {
-        if (file.mimetype.startsWith('image/')) {
-          cb(null, './public/uploads/img');
-        } else if (file.mimetype.includes('pdf')) {
-          cb(null, './public/uploads/pdf');
-        } else {
-          cb(new Error('Tipo no permitido'), null);
-        }
-      },
-      filename: (req, file, cb) => {
-        const name = req.body.title || 'sin-nombre';
-        const uniqueSuffix = randomUUID(); // UUID v4
-
-        cb(null, `${name}-${uniqueSuffix}${extname(file.originalname)}`);
-      },
-    }),
-  }))
+  @UseInterceptors(FileInterceptor('pdf', storageFor1File))
 
 
   create(@Body() data: any, @UploadedFile() file: Express.Multer.File) {
@@ -67,15 +45,15 @@ export class BookController {
 
 
 
-//accept=".pdf"
+  //accept=".pdf"
 
-@Delete(':id')
+  @Delete(':id')
   @Roles(Role.SUPERADMIN, Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   async delete(@Param('id', ParseIntPipe) id: number) {
-    
+
     const book = await this.bookService.findOne(id);
-    
+
     if (!book) {
       throw new NotFoundException('El libro no existe');
     }
@@ -98,75 +76,46 @@ export class BookController {
   }
 
 
-@Patch(':id') // Solo ADMIN actualiza
-@Roles(Role.SUPERADMIN, Role.ADMIN)
-@UseGuards(JwtAuthGuard, RolesGuard)
-@UseInterceptors(FileFieldsInterceptor([
-  { name: 'pdf', maxCount: 1 },
-  { name: 'img', maxCount: 1 }
-], {
-  limits: {
-    files: 2,
-  },
-  storage: diskStorage({
-    destination: (req, file, cb) => {
-      if (file.mimetype.startsWith('image/')) {
-        cb(null, './public/uploads/img');
-      } else if (file.mimetype.includes('pdf')) {
-        cb(null, './public/uploads/pdf');
-      } else {
-        cb(new Error('Tipo no permitido'), null);
-      }
-    },
-    filename: (req, file, cb) => {
-      const name = req.body.title || 'sin-nombre';
-      const uniqueSuffix = randomUUID();
-      cb(null, `${name}-${uniqueSuffix}${extname(file.originalname)}`);
-    },
-  }),
-}))
-async edit(
-  @Param('id', ParseIntPipe) id: number,
-  @Body() data: UpdateBookDto,
-  @UploadedFile('pdf') pdfFile: Express.Multer.File,
-  @UploadedFile('img') imgFile: Express.Multer.File,
-) {
-  // Obtener el libro existente para eliminar archivos antiguos
-  const existingBook = await this.bookService.findOne(id);
-  
-  if (!existingBook) {
-    throw new NotFoundException('El libro no existe');
-  }
+  @Patch(':id') // Solo ADMIN actualiza
+  @Roles(Role.SUPERADMIN, Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseInterceptors(FileInterceptor('pdf', storageFor1File))
+  async edit(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: any,
+    @UploadedFile() pdfFile: Express.Multer.File,
 
-  // Eliminar archivos antiguos si existen
-  const filePaths = [existingBook.routepdf, existingBook.routeimg];
-  filePaths.forEach((path) => {
-    if (path) {
-      const fullPath = join(process.cwd(), path);
-      if (existsSync(fullPath)) {
-        unlinkSync(fullPath);
-      }
+  ) {
+    // Obtener el libro existente para eliminar archivos antiguos
+    const existingBook = await this.bookService.findOne(id);
+
+    if (!existingBook) {
+      throw new NotFoundException('El libro no existe');
     }
-  });
 
-  // Preparar datos para actualizar
-  const updateData: any = { ...data };
-  
-  // Agregar nuevas rutas de archivos si se subieron
-  if (pdfFile) {
-    updateData.routepdf = `/public/uploads/pdf/${pdfFile.filename}`;
+    // Preparar datos para actualizar
+    let updateData: any = data;
+
+    if (pdfFile) {
+      // Eliminar archivos antiguos si existen
+      const filePaths = [existingBook.routepdf];
+      filePaths.forEach((path) => {
+        if (path) {
+          const fullPath = join(process.cwd(), path);
+          if (existsSync(fullPath)) {
+            unlinkSync(fullPath);
+          }
+        }
+      });
+      updateData = { ...data, routepdf: `/public/uploads/pdf/${pdfFile.filename}` };
+    }
+
+    return this.bookService.edit(id, updateData);
   }
-  
-  if (imgFile) {
-    updateData.routeimg = `/public/uploads/img/${imgFile.filename}`;
-  }
-
-  return this.bookService.edit(id, updateData);
-}
 
 
 
-  
+
 
   @Post('save/:bookId') // El usuario guarda un libro en su lista
   @UseGuards(JwtAuthGuard)

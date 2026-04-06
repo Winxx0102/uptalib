@@ -51,6 +51,7 @@ export class BookService {
   }
 
   async edit(id: number, data: bookUpdate) {
+
     return { book: await this.prisma.book.update({ where: { id }, data: data }), message: 'Libro editado' }
   }
 
