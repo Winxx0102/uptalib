@@ -37,6 +37,8 @@ export declare class UsersService {
             id: number;
             userId: number;
             saveeAt: Date;
+            createdAt: Date;
+            updatedAt: Date;
             bookId: number;
         })[];
         id: number;

@@ -7,6 +7,9 @@ import { InventoryModule } from './inventory/inventory.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path'
 import { MulterModule } from '@nestjs/platform-express';
+import { PhysicalBooksModule } from './physical-books/physical-books.module';
+import { CategoryModule } from './category/category.module';
+import { AuthorModule } from './author/author.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -21,7 +24,10 @@ import { MulterModule } from '@nestjs/platform-express';
     AuthModule,
     UsersModule,
     BooksModule,
-    InventoryModule
+    InventoryModule,
+    PhysicalBooksModule,
+    CategoryModule,
+    AuthorModule
   ],
 })
 export class AppModule { }

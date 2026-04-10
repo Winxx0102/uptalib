@@ -16,6 +16,9 @@ const inventory_module_1 = require("./inventory/inventory.module");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
 const platform_express_1 = require("@nestjs/platform-express");
+const physical_books_module_1 = require("./physical-books/physical-books.module");
+const category_module_1 = require("./category/category.module");
+const author_module_1 = require("./author/author.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -33,7 +36,10 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             user_module_1.UsersModule,
             books_module_1.BooksModule,
-            inventory_module_1.InventoryModule
+            inventory_module_1.InventoryModule,
+            physical_books_module_1.PhysicalBooksModule,
+            category_module_1.CategoryModule,
+            author_module_1.AuthorModule
         ],
     })
 ], AppModule);

@@ -15,6 +15,84 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//libros fisicos
+
+model Category {
+  id            String         @id @default(cuid())
+  name          String         @unique
+  physicalBooks PhysicalBook[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Author {
+  id            String         @id @default(cuid())
+  name          String
+  physicalBooks PhysicalBook[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model PhysicalBook {
+  id                String          @id @default(cuid())
+  isbn              String?         @unique
+  title             String
+  authorId          String
+  categoryId        String
+  pnf               Pnf?
+  yearOfPublication Int
+  editorial         String?
+  totalStock        Int
+  availableStock    Int
+  status            BookStatus      @default(DISPONIBLE)
+  author            Author          @relation(fields: [authorId], references: [id])
+  category          Category        @relation(fields: [categoryId], references: [id])
+  operations        BookOperation[]
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+model BookOperation {
+  id           String        @id @default(cuid())
+  bookId       String
+  type         OperationType
+  quantity     Int
+  observations String?
+  userId       String?
+
+  book PhysicalBook @relation(fields: [bookId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([bookId, createdAt])
+}
+
+enum BookStatus {
+  DISPONIBLE
+  AGOTADO
+  MANTENIMIENTO
+}
+
+enum Pnf {
+  INFORMATICA
+  ELECTRONICA
+  CONTADURIA
+  ADMINISTRACION
+  ELECTRICIDAD
+  MECANICA
+  INSTRUMENTACION
+  TELECOMUNICACIONES
+}
+
+enum OperationType {
+  ENTRADA
+  PRESTAMO
+  DEVOLUCION
+  BAJA
+  AJUSTE
+}
+
 //usuarios,roles y libros guardados xd
 
 model User {
@@ -52,6 +130,9 @@ model SavedBook {
 
   user   User @relation(fields: [userId], references: [id])
   userId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([userId, bookId])
 }

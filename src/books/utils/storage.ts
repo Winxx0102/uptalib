@@ -25,3 +25,5 @@ export const storageFor1File = {
         },
     }),
 }
+
+// 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 git key

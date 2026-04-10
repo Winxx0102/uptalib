@@ -51,6 +51,8 @@ export declare class BookController {
         id: number;
         userId: number;
         saveeAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
         bookId: number;
     }>;
     getMyLibrary(req: any): Promise<{

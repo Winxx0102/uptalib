@@ -5,20 +5,20 @@ export declare class InventoryController {
     constructor(inventoryService: InventoryService);
     create(createInventoryDto: any, img: Express.Multer.File): Promise<{
         item: {
+            id: number;
             name: string;
             description: string | null;
-            stock: number;
             routeimg: string | null;
-            id: number;
+            stock: number;
         };
         message: string;
     }>;
     findAll(query: any): Promise<{
+        id: number;
         name: string;
         description: string | null;
-        stock: number;
         routeimg: string | null;
-        id: number;
+        stock: number;
     }[]>;
     findOne(id: number): string;
     edit(id: number, updateInventoryDto: EditItemInventory): Promise<{
