@@ -11,8 +11,25 @@ export class CategoryService {
     return { status: 'success', message: 'Categoria creada', data: category };
   }
 
-  findAll() {
-    return `This action returns all category`;
+  findAll(query: any) {
+    const take = parseInt(query.limit) || 4;
+    const search = query.search
+
+    const where: any = {}
+
+    if (search) {
+      where.OR = [
+        {
+          name: { contains: search },
+        },
+
+      ]
+    }
+
+    return this.prisma.category.findMany({
+      take,
+      where,
+    })
   }
 
   findOne(id: number) {

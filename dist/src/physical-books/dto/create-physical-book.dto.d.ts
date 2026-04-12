@@ -1,7 +1,7 @@
 import { BookStatus, Pnf } from "@prisma/client";
 export declare class CreatePhysicalBookDto {
-    isbn: string;
     title: string;
+    isbn: string;
     yearOfPublication: number;
     authorId: string;
     categoryId: string;

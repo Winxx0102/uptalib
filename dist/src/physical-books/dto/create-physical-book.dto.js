@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreatePhysicalBookDto = void 0;
 const client_1 = require("@prisma/client");
+const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 class CreatePhysicalBookDto {
 }
@@ -18,15 +19,17 @@ exports.CreatePhysicalBookDto = CreatePhysicalBookDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MinLength)(3),
+    __metadata("design:type", String)
+], CreatePhysicalBookDto.prototype, "title", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MinLength)(3),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreatePhysicalBookDto.prototype, "isbn", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreatePhysicalBookDto.prototype, "title", void 0);
-__decorate([
     (0, class_validator_1.IsInt)(),
+    (0, class_transformer_1.Transform)(({ value }) => parseInt(value)),
     __metadata("design:type", Number)
 ], CreatePhysicalBookDto.prototype, "yearOfPublication", void 0);
 __decorate([
@@ -47,6 +50,7 @@ __decorate([
 ], CreatePhysicalBookDto.prototype, "editorial", void 0);
 __decorate([
     (0, class_validator_1.IsInt)(),
+    (0, class_transformer_1.Transform)(({ value }) => parseInt(value)),
     __metadata("design:type", Number)
 ], CreatePhysicalBookDto.prototype, "totalStock", void 0);
 __decorate([

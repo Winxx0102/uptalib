@@ -22,16 +22,48 @@ export class PhysicalBooksService {
     });
   }
 
-  findAll() {
-    return `This action returns all physicalBooks`;
+  findAll(query: any) {
+
+    const take = parseInt(query.limit) || 10;
+    const search = query.search
+    const where: any = {}
+    if (search) {
+      where.OR = [
+        {
+          title: { contains: search },
+        },
+
+      ]
+    }
+
+
+    return this.prisma.physicalBook.findMany({
+      where, take, include: {
+        author: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        category: {
+          select: {
+            id: true,
+            name: true
+          }
+        }
+      },
+    })
   }
 
   findOne(id: number) {
     return `This action returns a #${id} physicalBook`;
   }
 
-  update(id: string, updatePhysicalBookDto: UpdatePhysicalBookDto) {
-    return this.prisma.$transaction(async (tx) => {
+  async update(id: string, updatePhysicalBookDto: UpdatePhysicalBookDto) {
+
+
+    return await this.prisma.$transaction(async (tx) => {
+
 
       const physicalBook = await tx.physicalBook.update({
         where: { id: id },

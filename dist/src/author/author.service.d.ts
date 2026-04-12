@@ -14,7 +14,12 @@ export declare class AuthorService {
             updatedAt: Date;
         };
     }>;
-    findAll(): string;
+    findAll(query: any): Promise<{
+        id: string;
+        name: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>;
     findOne(id: number): string;
     update(id: number, updateAuthorDto: UpdateAuthorDto): Promise<{
         status: string;

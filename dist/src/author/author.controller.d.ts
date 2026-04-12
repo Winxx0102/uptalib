@@ -13,7 +13,12 @@ export declare class AuthorController {
             updatedAt: Date;
         };
     }>;
-    findAll(): string;
+    findAll({ search, limit }: any): Promise<{
+        id: string;
+        name: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>;
     findOne(id: string): string;
     update(id: string, updateAuthorDto: UpdateAuthorDto): Promise<{
         status: string;

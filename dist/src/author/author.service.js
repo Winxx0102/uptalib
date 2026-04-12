@@ -26,8 +26,21 @@ let AuthorService = class AuthorService {
             return new common_1.HttpException('error al crear autor', common_1.HttpStatus.BAD_REQUEST);
         return { status: 'success', data: author };
     }
-    findAll() {
-        return `This action returns all author`;
+    async findAll(query) {
+        const take = parseInt(query.limit) || 4;
+        const search = query.search;
+        const where = {};
+        if (search) {
+            where.OR = [
+                {
+                    name: { contains: search },
+                },
+            ];
+        }
+        return this.prisma.author.findMany({
+            take,
+            where,
+        });
     }
     findOne(id) {
         return `This action returns a #${id} author`;

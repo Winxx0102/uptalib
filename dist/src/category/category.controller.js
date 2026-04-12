@@ -24,8 +24,8 @@ let CategoryController = class CategoryController {
     create(createCategoryDto) {
         return this.categoryService.create(createCategoryDto);
     }
-    findAll() {
-        return this.categoryService.findAll();
+    findAll(query) {
+        return this.categoryService.findAll(query);
     }
     findOne(id) {
         return this.categoryService.findOne(+id);
@@ -47,8 +47,9 @@ __decorate([
 ], CategoryController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], CategoryController.prototype, "findAll", null);
 __decorate([

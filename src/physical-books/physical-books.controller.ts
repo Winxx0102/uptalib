@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { PhysicalBooksService } from './physical-books.service';
 import { CreatePhysicalBookDto } from './dto/create-physical-book.dto';
 import { UpdatePhysicalBookDto } from './dto/update-physical-book.dto';
 
-@Controller('physical-books')
+@Controller('physical-book')
 export class PhysicalBooksController {
   constructor(private readonly physicalBooksService: PhysicalBooksService) { }
 
@@ -13,8 +13,8 @@ export class PhysicalBooksController {
   }
 
   @Get()
-  findAll() {
-    return this.physicalBooksService.findAll();
+  findAll(@Query() query) {
+    return this.physicalBooksService.findAll(query);
   }
 
   @Get(':id')

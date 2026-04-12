@@ -14,7 +14,12 @@ export declare class CategoryService {
             updatedAt: Date;
         };
     }>;
-    findAll(): string;
+    findAll(query: any): import(".prisma/client").Prisma.PrismaPromise<{
+        id: string;
+        name: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>;
     findOne(id: number): string;
     update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<{
         status: string;

@@ -24,8 +24,8 @@ let PhysicalBooksController = class PhysicalBooksController {
     create(createPhysicalBookDto) {
         return this.physicalBooksService.create(createPhysicalBookDto);
     }
-    findAll() {
-        return this.physicalBooksService.findAll();
+    findAll(query) {
+        return this.physicalBooksService.findAll(query);
     }
     findOne(id) {
         return this.physicalBooksService.findOne(+id);
@@ -47,8 +47,9 @@ __decorate([
 ], PhysicalBooksController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], PhysicalBooksController.prototype, "findAll", null);
 __decorate([
@@ -74,7 +75,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PhysicalBooksController.prototype, "remove", null);
 exports.PhysicalBooksController = PhysicalBooksController = __decorate([
-    (0, common_1.Controller)('physical-books'),
+    (0, common_1.Controller)('physical-book'),
     __metadata("design:paramtypes", [physical_books_service_1.PhysicalBooksService])
 ], PhysicalBooksController);
 //# sourceMappingURL=physical-books.controller.js.map

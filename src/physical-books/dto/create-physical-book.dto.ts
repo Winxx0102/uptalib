@@ -1,51 +1,59 @@
 import { Author, BookStatus, Category, Pnf } from "@prisma/client";
+import { Transform } from "class-transformer";
 import { IsIn, IsInt, IsOptional, isString, IsString, MinLength, minLength } from "class-validator";
 
 export class CreatePhysicalBookDto {
+
+    @IsString()
+    @MinLength(3)
+
+    title: string;
+
+
     @IsString()
     @MinLength(3)
     @IsOptional()
-    isbn: string
+    isbn: string;
 
-    @IsString()
-    title: string
 
     @IsInt()
-    yearOfPublication: number
+    @Transform(({ value }: any) => parseInt(value))
+    yearOfPublication: number;
 
     @IsString()
-    authorId: string
+    authorId: string;
 
     @IsString()
-    categoryId: string
+    categoryId: string;
 
     @IsString()
-    pnf: Pnf
+    pnf: Pnf;
 
     @IsString()
-    editorial: string
+    editorial: string;
 
     @IsInt()
-    totalStock: number
+    @Transform(({ value }: any) => parseInt(value))
+    totalStock: number;
 
     @IsInt()
     @IsOptional()
-    availableStock: number
+    availableStock: number;
 
 
     @IsString()
     @IsOptional()
-    status: BookStatus
+    status: BookStatus;
 
 
     @IsOptional()
     @IsString()
-    authorName: string
+    authorName: string;
 
 
     @IsOptional()
     @IsString()
-    categoryName: string
+    categoryName: string;
 
 
 

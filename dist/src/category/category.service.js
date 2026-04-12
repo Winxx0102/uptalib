@@ -20,8 +20,21 @@ let CategoryService = class CategoryService {
         const category = await this.prisma.category.create({ data: { name: createCategoryDto.name } });
         return { status: 'success', message: 'Categoria creada', data: category };
     }
-    findAll() {
-        return `This action returns all category`;
+    findAll(query) {
+        const take = parseInt(query.limit) || 4;
+        const search = query.search;
+        const where = {};
+        if (search) {
+            where.OR = [
+                {
+                    name: { contains: search },
+                },
+            ];
+        }
+        return this.prisma.category.findMany({
+            take,
+            where,
+        });
     }
     findOne(id) {
         return `This action returns a #${id} category`;

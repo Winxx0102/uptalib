@@ -24,8 +24,8 @@ let AuthorController = class AuthorController {
     create(createAuthorDto) {
         return this.authorService.create(createAuthorDto);
     }
-    findAll() {
-        return this.authorService.findAll();
+    findAll({ search, limit }) {
+        return this.authorService.findAll({ search, limit });
     }
     findOne(id) {
         return this.authorService.findOne(+id);
@@ -47,8 +47,9 @@ __decorate([
 ], AuthorController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthorController.prototype, "findAll", null);
 __decorate([

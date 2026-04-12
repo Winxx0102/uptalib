@@ -18,8 +18,26 @@ export class AuthorService {
     return { status: 'success', data: author };
   }
 
-  findAll() {
-    return `This action returns all author`;
+  async findAll(query: any) {
+    const take = parseInt(query.limit) || 4;
+    const search = query.search
+
+    const where: any = {}
+
+    if (search) {
+      where.OR = [
+        {
+          name: { contains: search },
+        },
+
+      ]
+    }
+
+    return this.prisma.author.findMany({
+      take,
+      where,
+    })
+
   }
 
   findOne(id: number) {

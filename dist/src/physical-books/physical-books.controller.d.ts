@@ -23,7 +23,30 @@ export declare class PhysicalBooksController {
             categoryId: string;
         };
     }>;
-    findAll(): string;
+    findAll(query: any): import(".prisma/client").Prisma.PrismaPromise<({
+        category: {
+            id: string;
+            name: string;
+        };
+        author: {
+            id: string;
+            name: string;
+        };
+    } & {
+        status: import(".prisma/client").$Enums.BookStatus;
+        id: string;
+        isbn: string | null;
+        title: string;
+        pnf: import(".prisma/client").$Enums.Pnf | null;
+        yearOfPublication: number;
+        editorial: string | null;
+        totalStock: number;
+        availableStock: number;
+        createdAt: Date;
+        updatedAt: Date;
+        authorId: string;
+        categoryId: string;
+    })[]>;
     findOne(id: string): string;
     update(id: string, updatePhysicalBookDto: UpdatePhysicalBookDto): Promise<{
         status: string;
