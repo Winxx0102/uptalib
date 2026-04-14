@@ -10,6 +10,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { PhysicalBooksModule } from './physical-books/physical-books.module';
 import { CategoryModule } from './category/category.module';
 import { AuthorModule } from './author/author.module';
+import { PhysicalBookOperationModule } from './physical-book-operation/physical-book-operation.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -27,7 +28,8 @@ import { AuthorModule } from './author/author.module';
     InventoryModule,
     PhysicalBooksModule,
     CategoryModule,
-    AuthorModule
+    AuthorModule,
+    PhysicalBookOperationModule
   ],
 })
 export class AppModule { }

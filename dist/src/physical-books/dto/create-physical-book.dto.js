@@ -22,9 +22,8 @@ __decorate([
     __metadata("design:type", String)
 ], CreatePhysicalBookDto.prototype, "title", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(3),
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreatePhysicalBookDto.prototype, "isbn", void 0);
 __decorate([

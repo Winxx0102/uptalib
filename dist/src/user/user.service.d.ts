@@ -35,11 +35,11 @@ export declare class UsersService {
             };
         } & {
             id: number;
-            userId: number;
             saveeAt: Date;
+            bookId: number;
+            userId: number;
             createdAt: Date;
             updatedAt: Date;
-            bookId: number;
         })[];
         id: number;
         email: string;

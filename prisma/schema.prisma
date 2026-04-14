@@ -53,17 +53,17 @@ model PhysicalBook {
 }
 
 model BookOperation {
-  id           String        @id @default(cuid())
-  bookId       String
-  type         OperationType
-  quantity     Int
-  observations String?
-  userId       String?
-
-  book PhysicalBook @relation(fields: [bookId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String        @id @default(cuid())
+  bookId         String
+  type           OperationType
+  quantity       Int
+  observations   String?
+  personId       String?
+  personNames    String
+  personSurNames String
+  book           PhysicalBook  @relation(fields: [bookId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 
   @@index([bookId, createdAt])
 }

@@ -8,19 +8,19 @@ export declare class PhysicalBooksService {
         status: string;
         message: string;
         data: {
-            status: import(".prisma/client").$Enums.BookStatus;
             id: string;
-            isbn: string | null;
+            createdAt: Date;
+            updatedAt: Date;
             title: string;
-            pnf: import(".prisma/client").$Enums.Pnf | null;
+            isbn: string | null;
             yearOfPublication: number;
+            authorId: string;
+            categoryId: string;
+            pnf: import(".prisma/client").$Enums.Pnf | null;
             editorial: string | null;
             totalStock: number;
             availableStock: number;
-            createdAt: Date;
-            updatedAt: Date;
-            authorId: string;
-            categoryId: string;
+            status: import(".prisma/client").$Enums.BookStatus;
         };
     }>;
     findAll(query: any): import(".prisma/client").Prisma.PrismaPromise<({
@@ -33,38 +33,38 @@ export declare class PhysicalBooksService {
             name: string;
         };
     } & {
-        status: import(".prisma/client").$Enums.BookStatus;
         id: string;
-        isbn: string | null;
+        createdAt: Date;
+        updatedAt: Date;
         title: string;
-        pnf: import(".prisma/client").$Enums.Pnf | null;
+        isbn: string | null;
         yearOfPublication: number;
+        authorId: string;
+        categoryId: string;
+        pnf: import(".prisma/client").$Enums.Pnf | null;
         editorial: string | null;
         totalStock: number;
         availableStock: number;
-        createdAt: Date;
-        updatedAt: Date;
-        authorId: string;
-        categoryId: string;
+        status: import(".prisma/client").$Enums.BookStatus;
     })[]>;
     findOne(id: number): string;
     update(id: string, updatePhysicalBookDto: UpdatePhysicalBookDto): Promise<{
         status: string;
         message: string;
         data: {
-            status: import(".prisma/client").$Enums.BookStatus;
             id: string;
-            isbn: string | null;
+            createdAt: Date;
+            updatedAt: Date;
             title: string;
-            pnf: import(".prisma/client").$Enums.Pnf | null;
+            isbn: string | null;
             yearOfPublication: number;
+            authorId: string;
+            categoryId: string;
+            pnf: import(".prisma/client").$Enums.Pnf | null;
             editorial: string | null;
             totalStock: number;
             availableStock: number;
-            createdAt: Date;
-            updatedAt: Date;
-            authorId: string;
-            categoryId: string;
+            status: import(".prisma/client").$Enums.BookStatus;
         };
     }>;
     remove(id: string): Promise<{

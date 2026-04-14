@@ -6,13 +6,10 @@ export class CreatePhysicalBookDto {
 
     @IsString()
     @MinLength(3)
-
     title: string;
 
-
-    @IsString()
-    @MinLength(3)
     @IsOptional()
+    @IsString()
     isbn: string;
 
 
