@@ -21,6 +21,15 @@ let PhysicalBookOperationController = class PhysicalBookOperationController {
     constructor(physicalBookOperationService) {
         this.physicalBookOperationService = physicalBookOperationService;
     }
+    findAll(quer) {
+        return this.physicalBookOperationService.findAllOperations(quer);
+    }
+    addEntries(entriesDto) {
+        return this.physicalBookOperationService.addEntries(entriesDto);
+    }
+    addDrops(entriesDto) {
+        return this.physicalBookOperationService.addDrops(entriesDto);
+    }
     loan(makeLoanDto) {
         return this.physicalBookOperationService.loan(makeLoanDto);
     }
@@ -30,9 +39,6 @@ let PhysicalBookOperationController = class PhysicalBookOperationController {
     }
     findAllLoans(query) {
         return this.physicalBookOperationService.findAllLoans(query);
-    }
-    findAll() {
-        return this.physicalBookOperationService.findAll();
     }
     findOne(id) {
         return this.physicalBookOperationService.findOne(+id);
@@ -45,6 +51,27 @@ let PhysicalBookOperationController = class PhysicalBookOperationController {
     }
 };
 exports.PhysicalBookOperationController = PhysicalBookOperationController;
+__decorate([
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], PhysicalBookOperationController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Patch)('entries'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], PhysicalBookOperationController.prototype, "addEntries", null);
+__decorate([
+    (0, common_1.Patch)('drops'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], PhysicalBookOperationController.prototype, "addDrops", null);
 __decorate([
     (0, common_1.Post)('loan'),
     __param(0, (0, common_1.Body)()),
@@ -67,12 +94,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], PhysicalBookOperationController.prototype, "findAllLoans", null);
-__decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], PhysicalBookOperationController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),

@@ -6,14 +6,95 @@ import { PrismaService } from 'prisma/prisma.service';
 @Injectable()
 export class PhysicalBookOperationService {
   constructor(private prisma: PrismaService) { }
+  //operation global related
+  async findAllOperations(query) {
+
+    let QUERY: any = {
+    }
+
+    if (query.search != '') {
+      QUERY.where = { OR: [{ book: { title: { contains: query.search } } }] }
+    }
+
+    return await this.prisma.bookOperation.findMany({
+      ...QUERY, take: parseInt(query.limit), orderBy: {
+        createdAt: 'desc'
+      }, include: {
+        book: {
+          select: {
+            title: true,
+            isbn: true
+          }
+
+        }
+      }
+    })
 
 
+  }
+
+  async addDrops(entriesDto: any) {
+    const book = await this.prisma.physicalBook.update({
+      where: { id: entriesDto.bookId }, data: {
+        availableStock: {
+          decrement: parseInt(entriesDto.quantity)
+        },
+        totalStock: {
+          decrement: parseInt(entriesDto.quantity)
+        }
+      }
+    })
+
+    await this.prisma.bookOperation.create({
+      data: {
+        bookId: entriesDto.bookId,
+        quantity: parseInt(entriesDto.quantity),
+        type: 'BAJA',
+        personNames: entriesDto.personNames,
+        personSurNames: entriesDto.personSurNames
+
+      }
+    })
+
+    return { status: 'success', message: 'Bajas añadidas' }
+  }
+
+  async addEntries(entriesDto: any) {
+    console.log(entriesDto)
+
+    const book = await this.prisma.physicalBook.update({
+      where: { id: entriesDto.bookId }, data: {
+        availableStock: {
+          increment: parseInt(entriesDto.quantity)
+        },
+        totalStock: {
+          increment: parseInt(entriesDto.quantity)
+        }
+      }
+    })
+
+    await this.prisma.bookOperation.create({
+      data: {
+        bookId: entriesDto.bookId,
+        quantity: parseInt(entriesDto.quantity),
+        type: 'ENTRADA',
+        personNames: entriesDto.personNames,
+        personSurNames: entriesDto.personSurNames
+
+      }
+    })
+
+    return { status: 'success', message: 'Entradas añadidas' }
+  }
+
+
+  //loan related
 
   async findAllLoans(query) {
     const QUERY: any = {}
 
     if (query.search) {
-      QUERY.where = { OR: [{ book: { title: { contains: query.search } } }] }
+      QUERY.where = { data: { type: 'PRESTAMO' }, OR: [{ book: { title: { contains: query.search } } }] }
 
     }
     QUERY.take = parseInt(query.limit) || 10
@@ -61,7 +142,13 @@ export class PhysicalBookOperationService {
         throw new BadRequestException('La cantidad supera el stock')
       }
 
+
+
       await tx.physicalBook.update({ where: { id: loan.bookId }, data: { availableStock: { decrement: loan.quantity } } })
+
+      if (physicalBook.availableStock - loan.quantity == 0) {
+        await tx.physicalBook.update({ where: { id: loan.bookId }, data: { status: 'AGOTADO' } })
+      }
 
       return { state: 'success', message: 'Prestamo hecho', loan: loan }
 

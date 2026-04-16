@@ -4,17 +4,37 @@ import { PrismaService } from 'prisma/prisma.service';
 export declare class PhysicalBookOperationService {
     private prisma;
     constructor(prisma: PrismaService);
-    findAllLoans(query: any): Promise<{
+    findAllOperations(query: any): Promise<{
         id: string;
         bookId: string;
-        createdAt: Date;
-        updatedAt: Date;
         type: import(".prisma/client").$Enums.OperationType;
         quantity: number;
         observations: string | null;
         personId: string | null;
         personNames: string;
         personSurNames: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>;
+    addDrops(entriesDto: any): Promise<{
+        status: string;
+        message: string;
+    }>;
+    addEntries(entriesDto: any): Promise<{
+        status: string;
+        message: string;
+    }>;
+    findAllLoans(query: any): Promise<{
+        id: string;
+        bookId: string;
+        type: import(".prisma/client").$Enums.OperationType;
+        quantity: number;
+        observations: string | null;
+        personId: string | null;
+        personNames: string;
+        personSurNames: string;
+        createdAt: Date;
+        updatedAt: Date;
     }[]>;
     settle(id: any): Promise<{
         state: string;
@@ -26,14 +46,14 @@ export declare class PhysicalBookOperationService {
         loan: {
             id: string;
             bookId: string;
-            createdAt: Date;
-            updatedAt: Date;
             type: import(".prisma/client").$Enums.OperationType;
             quantity: number;
             observations: string | null;
             personId: string | null;
             personNames: string;
             personSurNames: string;
+            createdAt: Date;
+            updatedAt: Date;
         };
     }>;
     create(createPhysicalBookOperationDto: CreatePhysicalBookOperationDto): string;

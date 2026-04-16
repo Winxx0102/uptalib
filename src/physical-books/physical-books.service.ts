@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePhysicalBookDto } from './dto/create-physical-book.dto';
 import { UpdatePhysicalBookDto } from './dto/update-physical-book.dto';
 import { PrismaService } from 'prisma/prisma.service';
@@ -60,26 +60,53 @@ export class PhysicalBooksService {
   }
 
   async update(id: string, updatePhysicalBookDto: UpdatePhysicalBookDto) {
-
-
     return await this.prisma.$transaction(async (tx) => {
+      // 1. Obtener el PhysicalBook actual para calcular la diferencia
+      const currentBook = await tx.physicalBook.findUnique({
+        where: { id }
+      });
 
+      if (!currentBook) {
+        throw new Error('Libro físico no encontrado');
+      }
 
+      // 2. Calcular la diferencia actual (prestados, dañados, etc.)
+      const currentDifference = currentBook.totalStock - currentBook.availableStock;
+
+      // 3. Calcular el nuevo availableStock manteniendo la diferencia
+      const newAvailableStock = updatePhysicalBookDto.totalStock - currentDifference;
+      if (newAvailableStock < 0) {
+        throw new HttpException('Cantidad incorrecta, resuelve los prestamos del libro primero', HttpStatus.BAD_REQUEST)
+      }
+
+      // 4. Actualizar con los valores calculados
       const physicalBook = await tx.physicalBook.update({
-        where: { id: id },
-        data: updatePhysicalBookDto
-      })
+        where: { id },
+        data: {
+          ...updatePhysicalBookDto,
+          availableStock: newAvailableStock // ✅ Automático
+        }
+      });
 
       return {
         status: 'success',
         message: 'Libro físico actualizado exitosamente',
-        data: { ...physicalBook }
+        data: {
+          ...physicalBook,
+          difference: currentDifference // Para debugging
+        }
       };
     });
-
   }
 
   async remove(id: string) {
+
+    await this.prisma.bookOperation.deleteMany({
+      where: {
+        bookId: id
+      }
+    });
+
     const removedBook = await this.prisma.physicalBook.delete({
       where: { id }
     })

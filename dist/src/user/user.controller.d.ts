@@ -22,11 +22,11 @@ export declare class UsersController {
             };
         } & {
             id: number;
-            saveeAt: Date;
-            bookId: number;
             userId: number;
+            saveeAt: Date;
             createdAt: Date;
             updatedAt: Date;
+            bookId: number;
         })[];
         id: number;
         email: string;

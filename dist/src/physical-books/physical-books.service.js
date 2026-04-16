@@ -61,18 +61,40 @@ let PhysicalBooksService = class PhysicalBooksService {
     }
     async update(id, updatePhysicalBookDto) {
         return await this.prisma.$transaction(async (tx) => {
+            const currentBook = await tx.physicalBook.findUnique({
+                where: { id }
+            });
+            if (!currentBook) {
+                throw new Error('Libro físico no encontrado');
+            }
+            const currentDifference = currentBook.totalStock - currentBook.availableStock;
+            const newAvailableStock = updatePhysicalBookDto.totalStock - currentDifference;
+            if (newAvailableStock < 0) {
+                throw new common_1.HttpException('Cantidad incorrecta, resuelve los prestamos del libro primero', common_1.HttpStatus.BAD_REQUEST);
+            }
             const physicalBook = await tx.physicalBook.update({
-                where: { id: id },
-                data: updatePhysicalBookDto
+                where: { id },
+                data: {
+                    ...updatePhysicalBookDto,
+                    availableStock: newAvailableStock
+                }
             });
             return {
                 status: 'success',
                 message: 'Libro físico actualizado exitosamente',
-                data: { ...physicalBook }
+                data: {
+                    ...physicalBook,
+                    difference: currentDifference
+                }
             };
         });
     }
     async remove(id) {
+        await this.prisma.bookOperation.deleteMany({
+            where: {
+                bookId: id
+            }
+        });
         const removedBook = await this.prisma.physicalBook.delete({
             where: { id }
         });

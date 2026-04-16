@@ -49,11 +49,11 @@ export declare class BookController {
     }>;
     save(req: any, bookId: number): Promise<{
         id: number;
-        saveeAt: Date;
-        bookId: number;
         userId: number;
+        saveeAt: Date;
         createdAt: Date;
         updatedAt: Date;
+        bookId: number;
     }>;
     getMyLibrary(req: any): Promise<{
         id: number;

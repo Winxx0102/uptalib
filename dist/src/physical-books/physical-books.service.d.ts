@@ -9,9 +9,9 @@ export declare class PhysicalBooksService {
         message: string;
         data: {
             id: string;
+            title: string;
             createdAt: Date;
             updatedAt: Date;
-            title: string;
             isbn: string | null;
             yearOfPublication: number;
             authorId: string;
@@ -34,9 +34,9 @@ export declare class PhysicalBooksService {
         };
     } & {
         id: string;
+        title: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
         isbn: string | null;
         yearOfPublication: number;
         authorId: string;
@@ -52,10 +52,11 @@ export declare class PhysicalBooksService {
         status: string;
         message: string;
         data: {
+            difference: number;
             id: string;
+            title: string;
             createdAt: Date;
             updatedAt: Date;
-            title: string;
             isbn: string | null;
             yearOfPublication: number;
             authorId: string;

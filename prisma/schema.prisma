@@ -35,7 +35,7 @@ model Author {
 
 model PhysicalBook {
   id                String          @id @default(cuid())
-  isbn              String?         @unique
+  isbn              String?
   title             String
   authorId          String
   categoryId        String
@@ -45,8 +45,8 @@ model PhysicalBook {
   totalStock        Int
   availableStock    Int
   status            BookStatus      @default(DISPONIBLE)
-  author            Author          @relation(fields: [authorId], references: [id])
-  category          Category        @relation(fields: [categoryId], references: [id])
+  author            Author          @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  category          Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   operations        BookOperation[]
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt

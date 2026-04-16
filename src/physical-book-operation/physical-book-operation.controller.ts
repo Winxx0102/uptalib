@@ -8,6 +8,24 @@ import { MakeLoanDto } from './dto/makeLoan.dto';
 export class PhysicalBookOperationController {
   constructor(private readonly physicalBookOperationService: PhysicalBookOperationService) { }
 
+  @Get()
+  findAll(@Query() quer) {
+    return this.physicalBookOperationService.findAllOperations(quer);
+  }
+
+  //entries
+  @Patch('entries')
+  addEntries(@Body() entriesDto: any) {
+    return this.physicalBookOperationService.addEntries(entriesDto)
+  }
+
+  @Patch('drops')
+  addDrops(@Body() entriesDto: any) {
+    return this.physicalBookOperationService.addDrops(entriesDto)
+  }
+
+
+  //loan related
   @Post('loan')
   loan(@Body() makeLoanDto: MakeLoanDto) {
     return this.physicalBookOperationService.loan(makeLoanDto);
@@ -26,10 +44,6 @@ export class PhysicalBookOperationController {
 
   }
 
-  @Get()
-  findAll() {
-    return this.physicalBookOperationService.findAll();
-  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

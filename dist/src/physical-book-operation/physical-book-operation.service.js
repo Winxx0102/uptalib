@@ -16,14 +16,78 @@ let PhysicalBookOperationService = class PhysicalBookOperationService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    async findAllOperations(query) {
+        let QUERY = {};
+        if (query.search != '') {
+            QUERY.where = { OR: [{ book: { title: { contains: query.search } } }] };
+        }
+        return await this.prisma.bookOperation.findMany({
+            ...QUERY, take: parseInt(query.limit), orderBy: {
+                createdAt: 'desc'
+            }, include: {
+                book: {
+                    select: {
+                        title: true,
+                        isbn: true
+                    }
+                }
+            }
+        });
+    }
+    async addDrops(entriesDto) {
+        const book = await this.prisma.physicalBook.update({
+            where: { id: entriesDto.bookId }, data: {
+                availableStock: {
+                    decrement: parseInt(entriesDto.quantity)
+                },
+                totalStock: {
+                    decrement: parseInt(entriesDto.quantity)
+                }
+            }
+        });
+        await this.prisma.bookOperation.create({
+            data: {
+                bookId: entriesDto.bookId,
+                quantity: parseInt(entriesDto.quantity),
+                type: 'BAJA',
+                personNames: entriesDto.personNames,
+                personSurNames: entriesDto.personSurNames
+            }
+        });
+        return { status: 'success', message: 'Bajas añadidas' };
+    }
+    async addEntries(entriesDto) {
+        console.log(entriesDto);
+        const book = await this.prisma.physicalBook.update({
+            where: { id: entriesDto.bookId }, data: {
+                availableStock: {
+                    increment: parseInt(entriesDto.quantity)
+                },
+                totalStock: {
+                    increment: parseInt(entriesDto.quantity)
+                }
+            }
+        });
+        await this.prisma.bookOperation.create({
+            data: {
+                bookId: entriesDto.bookId,
+                quantity: parseInt(entriesDto.quantity),
+                type: 'ENTRADA',
+                personNames: entriesDto.personNames,
+                personSurNames: entriesDto.personSurNames
+            }
+        });
+        return { status: 'success', message: 'Entradas añadidas' };
+    }
     async findAllLoans(query) {
         const QUERY = {};
         if (query.search) {
-            QUERY.where = { OR: [{ book: { title: { contains: query.search } } }, { type: 'PRESTAMO' }] };
+            QUERY.where = { data: { type: 'PRESTAMO' }, OR: [{ book: { title: { contains: query.search } } }] };
         }
         QUERY.take = parseInt(query.limit) || 10;
+        console.log(QUERY);
         return (await this.prisma.bookOperation.findMany({
-            ...QUERY, include: {
+            ...QUERY, where: { ...QUERY.where, type: 'PRESTAMO' }, include: {
                 book: {
                     select: {
                         title: true
@@ -54,9 +118,12 @@ let PhysicalBookOperationService = class PhysicalBookOperationService {
             const loan = await tx.bookOperation.create({ data: { ...makeLoanDto, type: 'PRESTAMO' } });
             const physicalBook = await tx.physicalBook.findUnique({ where: { id: loan.bookId } });
             if (physicalBook.availableStock - loan.quantity < 0) {
-                throw new common_1.HttpException('La cantidad sobrepasa el stock disponible', common_1.HttpStatus.BAD_REQUEST);
+                throw new common_1.BadRequestException('La cantidad supera el stock');
             }
             await tx.physicalBook.update({ where: { id: loan.bookId }, data: { availableStock: { decrement: loan.quantity } } });
+            if (physicalBook.availableStock - loan.quantity == 0) {
+                await tx.physicalBook.update({ where: { id: loan.bookId }, data: { status: 'AGOTADO' } });
+            }
             return { state: 'success', message: 'Prestamo hecho', loan: loan };
         });
     }
