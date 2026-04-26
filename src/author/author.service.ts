@@ -53,9 +53,9 @@ export class AuthorService {
     return { status: 'success', message: `Se ha actualizado a${updateAuthorDto.name}`, data: author };
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const author = await this.prisma.author.delete({
-      where: { id: id.toString() }
+      where: { id }
     })
     return { status: 'success', message: `Se ha eliminado al autor`, data: author };
   }

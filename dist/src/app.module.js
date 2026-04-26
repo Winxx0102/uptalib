@@ -20,6 +20,8 @@ const physical_books_module_1 = require("./physical-books/physical-books.module"
 const category_module_1 = require("./category/category.module");
 const author_module_1 = require("./author/author.module");
 const physical_book_operation_module_1 = require("./physical-book-operation/physical-book-operation.module");
+const item_type_module_1 = require("./item-type/item-type.module");
+const inventory_operation_module_1 = require("./inventory-operation/inventory-operation.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -41,7 +43,9 @@ exports.AppModule = AppModule = __decorate([
             physical_books_module_1.PhysicalBooksModule,
             category_module_1.CategoryModule,
             author_module_1.AuthorModule,
-            physical_book_operation_module_1.PhysicalBookOperationModule
+            physical_book_operation_module_1.PhysicalBookOperationModule,
+            item_type_module_1.ItemTypeModule,
+            inventory_operation_module_1.InventoryOperationModule
         ],
     })
 ], AppModule);

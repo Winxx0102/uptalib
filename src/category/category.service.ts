@@ -45,7 +45,7 @@ export class CategoryService {
     return { status: 'success', message: `Se ha actualizado a ${updateCategoryDto.name}` };
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const category = await this.prisma.category.delete({
       where: { id: id.toString() }
     })

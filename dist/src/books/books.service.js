@@ -22,6 +22,8 @@ let BookService = class BookService {
     }
     async findAll(query) {
         const take = parseInt(query.limit) || 10;
+        const page = parseInt(query.page) || 1;
+        const skip = (page - 1) * take;
         const search = query.search;
         const where = {};
         if (search) {
@@ -34,10 +36,13 @@ let BookService = class BookService {
                 }
             ];
         }
-        return this.prisma.book.findMany({
+        const totalPages = await this.prisma.book.count({ where });
+        const data = await this.prisma.book.findMany({
             take,
+            skip,
             where,
         });
+        return { data, totalPages };
     }
     async create(data) {
         const book = await this.prisma.book.create({ data });
@@ -54,25 +59,60 @@ let BookService = class BookService {
         if (!book)
             throw new common_1.NotFoundException('El libro no existe');
         try {
-            return await this.prisma.savedBook.create({
-                data: {
-                    userId,
-                    bookId,
-                },
-            });
+            return {
+                message: "Libro Guardado", data: await this.prisma.savedBook.create({
+                    data: {
+                        userId,
+                        bookId,
+                    },
+                })
+            };
         }
         catch (error) {
             throw new common_1.ConflictException('Ya tienes este libro guardado');
         }
     }
-    async getSavedBook(userId) {
-        const userLibrary = await this.prisma.savedBook.findMany({
-            where: { userId },
+    async removeFromUser(userId, bookId) {
+        const savedBook = await this.prisma.savedBook.findMany({
+            where: {
+                userId,
+                bookId: bookId
+            }
+        });
+        await this.prisma.savedBook.delete({
+            where: { id: savedBook[0].id, userId }
+        });
+        return { message: 'Libro eliminado', data: savedBook };
+    }
+    async getVerifyLike(userId, bookId) {
+        const savedBook = await this.prisma.savedBook.findMany({
+            where: {
+                userId,
+                bookId
+            }
+        });
+        return savedBook[0] ? true : false;
+    }
+    async getSavedBooks(userId, query) {
+        console.log(userId);
+        const where = { userId };
+        const page = parseInt(query.page) || 1;
+        const take = parseInt(query.limit) || 10;
+        const skip = (page - 1) * 1;
+        if (query.search) {
+            where.OR = [
+                { book: { title: { contains: query.search } } }
+            ];
+        }
+        const totalPages = await this.prisma.savedBook.count({ where });
+        const data = await this.prisma.savedBook.findMany({
+            where,
+            take, skip,
             include: {
                 book: true,
             },
         });
-        return userLibrary.map((item) => item.book);
+        return { data, totalPages };
     }
 };
 exports.BookService = BookService;

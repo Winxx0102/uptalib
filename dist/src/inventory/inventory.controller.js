@@ -34,13 +34,13 @@ let InventoryController = class InventoryController {
         return this.inventoryService.findAll(query);
     }
     findOne(id) {
-        return this.inventoryService.findOne(+id);
+        return this.inventoryService.findOne(id);
     }
     edit(id, updateInventoryDto) {
-        return this.inventoryService.edit(+id, updateInventoryDto);
+        return this.inventoryService.edit(id, updateInventoryDto);
     }
     delete(id) {
-        return this.inventoryService.delete(+id);
+        return this.inventoryService.delete(id);
     }
 };
 exports.InventoryController = InventoryController;
@@ -64,7 +64,7 @@ __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], InventoryController.prototype, "findOne", null);
 __decorate([
@@ -72,14 +72,14 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, edit_item_dto_1.EditItemInventory]),
+    __metadata("design:paramtypes", [String, edit_item_dto_1.EditItemInventory]),
     __metadata("design:returntype", void 0)
 ], InventoryController.prototype, "edit", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], InventoryController.prototype, "delete", null);
 exports.InventoryController = InventoryController = __decorate([

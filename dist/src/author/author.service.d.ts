@@ -31,7 +31,7 @@ export declare class AuthorService {
             updatedAt: Date;
         };
     }>;
-    remove(id: number): Promise<{
+    remove(id: string): Promise<{
         status: string;
         message: string;
         data: {

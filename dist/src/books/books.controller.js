@@ -30,6 +30,9 @@ let BookController = class BookController {
     findAll(query) {
         return this.bookService.findAll(query);
     }
+    getMyLibrary(req, query) {
+        return this.bookService.getSavedBooks(req.user.userId, query);
+    }
     findOne(id) {
         return this.bookService.findOne(id);
     }
@@ -73,11 +76,14 @@ let BookController = class BookController {
         }
         return this.bookService.edit(id, updateData);
     }
+    verifyLike(req, bookId) {
+        return this.bookService.getVerifyLike(req.user.userId, bookId);
+    }
+    removeLike(req, bookId) {
+        return this.bookService.removeFromUser(req.user.userId, bookId);
+    }
     save(req, bookId) {
         return this.bookService.saveToUser(req.user.userId, bookId);
-    }
-    getMyLibrary(req) {
-        return this.bookService.getSavedBook(req.user.userId);
     }
 };
 exports.BookController = BookController;
@@ -89,6 +95,15 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], BookController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('my-library'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], BookController.prototype, "getMyLibrary", null);
 __decorate([
     (0, common_1.Get)(':id'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
@@ -130,6 +145,24 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BookController.prototype, "edit", null);
 __decorate([
+    (0, common_1.Get)('verify-like/:bookId'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Param)('bookId', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], BookController.prototype, "verifyLike", null);
+__decorate([
+    (0, common_1.Post)('remove-like/:bookId'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Param)('bookId', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], BookController.prototype, "removeLike", null);
+__decorate([
     (0, common_1.Post)('save/:bookId'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Req)()),
@@ -138,14 +171,6 @@ __decorate([
     __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", void 0)
 ], BookController.prototype, "save", null);
-__decorate([
-    (0, common_1.Get)('my-library'),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], BookController.prototype, "getMyLibrary", null);
 exports.BookController = BookController = __decorate([
     (0, common_1.Controller)('book'),
     __metadata("design:paramtypes", [books_service_1.BookService])

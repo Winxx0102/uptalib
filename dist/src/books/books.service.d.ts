@@ -18,14 +18,17 @@ export declare class BookService {
         updateAt: Date;
     }>;
     findAll(query: any): Promise<{
-        id: number;
-        title: string;
-        description: string | null;
-        routepdf: string;
-        routeimg: string | null;
-        createAt: Date;
-        updateAt: Date;
-    }[]>;
+        data: {
+            id: number;
+            title: string;
+            description: string | null;
+            routepdf: string;
+            routeimg: string | null;
+            createAt: Date;
+            updateAt: Date;
+        }[];
+        totalPages: number;
+    }>;
     create(data: any): Promise<{
         message: string;
     }>;
@@ -54,21 +57,48 @@ export declare class BookService {
         message: string;
     }>;
     saveToUser(userId: number, bookId: number): Promise<{
-        id: number;
-        userId: number;
-        saveeAt: Date;
-        createdAt: Date;
-        updatedAt: Date;
-        bookId: number;
+        message: string;
+        data: {
+            id: number;
+            saveeAt: Date;
+            createdAt: Date;
+            updatedAt: Date;
+            bookId: number;
+            userId: number;
+        };
     }>;
-    getSavedBook(userId: number): Promise<{
-        id: number;
-        title: string;
-        description: string | null;
-        routepdf: string;
-        routeimg: string | null;
-        createAt: Date;
-        updateAt: Date;
-    }[]>;
+    removeFromUser(userId: number, bookId: number): Promise<{
+        message: string;
+        data: {
+            id: number;
+            saveeAt: Date;
+            createdAt: Date;
+            updatedAt: Date;
+            bookId: number;
+            userId: number;
+        }[];
+    }>;
+    getVerifyLike(userId: any, bookId: any): Promise<boolean>;
+    getSavedBooks(userId: number, query: any): Promise<{
+        data: ({
+            book: {
+                id: number;
+                title: string;
+                description: string | null;
+                routepdf: string;
+                routeimg: string | null;
+                createAt: Date;
+                updateAt: Date;
+            };
+        } & {
+            id: number;
+            saveeAt: Date;
+            createdAt: Date;
+            updatedAt: Date;
+            bookId: number;
+            userId: number;
+        })[];
+        totalPages: number;
+    }>;
 }
 export {};

@@ -28,19 +28,52 @@ let PhysicalBooksService = class PhysicalBooksService {
             };
         });
     }
-    findAll(query) {
+    async findAll(query) {
         const take = parseInt(query.limit) || 10;
+        const page = parseInt(query.page) || 1;
+        const skip = (page - 1) * take;
         const search = query.search;
         const where = {};
+        query.pnf = query.pnf == 'undefined' || query.pnf == '' ? 'todos' : query.pnf;
+        query.genre = query.genre == 'undefined' ? '' : query.genre;
         if (search) {
-            where.OR = [
+            where.AND = [
                 {
                     title: { contains: search },
                 },
             ];
         }
-        return this.prisma.physicalBook.findMany({
-            where, take, include: {
+        if (query.genre) {
+            if (where.AND) {
+                where.AND.push({
+                    category: {
+                        name: { contains: query.genre || '' }
+                    }
+                });
+            }
+            else {
+                where.AND = [
+                    {
+                        category: { name: query.genre || '' },
+                    },
+                ];
+            }
+        }
+        if (query.pnf != 'todos') {
+            if (where.AND) {
+                where.AND.push({
+                    pnf: query.pnf
+                });
+            }
+            else if (!where.AND) {
+                where.AND = [
+                    { pnf: query.pnf }
+                ];
+            }
+        }
+        const totalPages = await this.prisma.physicalBook.count({ where });
+        const data = await this.prisma.physicalBook.findMany({
+            where, take, skip, include: {
                 author: {
                     select: {
                         id: true,
@@ -55,6 +88,7 @@ let PhysicalBooksService = class PhysicalBooksService {
                 }
             },
         });
+        return { data, totalPages };
     }
     findOne(id) {
         return `This action returns a #${id} physicalBook`;

@@ -12,41 +12,44 @@ export declare class PhysicalBooksService {
             title: string;
             createdAt: Date;
             updatedAt: Date;
+            totalStock: number;
+            availableStock: number;
+            status: import(".prisma/client").$Enums.BookStatus;
             isbn: string | null;
             yearOfPublication: number;
             authorId: string;
             categoryId: string;
             pnf: import(".prisma/client").$Enums.Pnf | null;
             editorial: string | null;
+        };
+    }>;
+    findAll(query: any): Promise<{
+        data: ({
+            category: {
+                id: string;
+                name: string;
+            };
+            author: {
+                id: string;
+                name: string;
+            };
+        } & {
+            id: string;
+            title: string;
+            createdAt: Date;
+            updatedAt: Date;
             totalStock: number;
             availableStock: number;
             status: import(".prisma/client").$Enums.BookStatus;
-        };
+            isbn: string | null;
+            yearOfPublication: number;
+            authorId: string;
+            categoryId: string;
+            pnf: import(".prisma/client").$Enums.Pnf | null;
+            editorial: string | null;
+        })[];
+        totalPages: number;
     }>;
-    findAll(query: any): import(".prisma/client").Prisma.PrismaPromise<({
-        category: {
-            id: string;
-            name: string;
-        };
-        author: {
-            id: string;
-            name: string;
-        };
-    } & {
-        id: string;
-        title: string;
-        createdAt: Date;
-        updatedAt: Date;
-        isbn: string | null;
-        yearOfPublication: number;
-        authorId: string;
-        categoryId: string;
-        pnf: import(".prisma/client").$Enums.Pnf | null;
-        editorial: string | null;
-        totalStock: number;
-        availableStock: number;
-        status: import(".prisma/client").$Enums.BookStatus;
-    })[]>;
     findOne(id: number): string;
     update(id: string, updatePhysicalBookDto: UpdatePhysicalBookDto): Promise<{
         status: string;
@@ -57,15 +60,15 @@ export declare class PhysicalBooksService {
             title: string;
             createdAt: Date;
             updatedAt: Date;
+            totalStock: number;
+            availableStock: number;
+            status: import(".prisma/client").$Enums.BookStatus;
             isbn: string | null;
             yearOfPublication: number;
             authorId: string;
             categoryId: string;
             pnf: import(".prisma/client").$Enums.Pnf | null;
             editorial: string | null;
-            totalStock: number;
-            availableStock: number;
-            status: import(".prisma/client").$Enums.BookStatus;
         };
     }>;
     remove(id: string): Promise<{

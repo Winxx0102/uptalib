@@ -23,6 +23,13 @@ export class BookController {
     return this.bookService.findAll(query);
   }
 
+  @Get('my-library') // Ver mis libros guardados
+  @UseGuards(JwtAuthGuard)
+  getMyLibrary(@Req() req: any, @Query() query: any) {
+    return this.bookService.getSavedBooks(req.user.userId, query);
+  }
+
+
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   findOne(@Param('id', ParseIntPipe) id: number) {
@@ -113,6 +120,20 @@ export class BookController {
 
 
 
+  @Get('verify-like/:bookId')
+  @UseGuards(JwtAuthGuard)
+  verifyLike(@Req() req, @Param('bookId', ParseIntPipe) bookId) {
+    return this.bookService.getVerifyLike(req.user.userId, bookId)
+  }
+
+  @Post('remove-like/:bookId')
+  @UseGuards(JwtAuthGuard)
+  removeLike(@Req() req, @Param('bookId', ParseIntPipe) bookId) {
+    return this.bookService.removeFromUser(req.user.userId, bookId)
+  }
+
+
+
 
 
   @Post('save/:bookId') // El usuario guarda un libro en su lista
@@ -121,9 +142,5 @@ export class BookController {
     return this.bookService.saveToUser(req.user.userId, bookId);
   }
 
-  @Get('my-library') // Ver mis libros guardados
-  @UseGuards(JwtAuthGuard)
-  getMyLibrary(@Req() req) {
-    return this.bookService.getSavedBook(req.user.userId);
-  }
+
 }

@@ -3,14 +3,38 @@ export declare class BookController {
     private bookService;
     constructor(bookService: BookService);
     findAll(query: any): Promise<{
-        id: number;
-        title: string;
-        description: string | null;
-        routepdf: string;
-        routeimg: string | null;
-        createAt: Date;
-        updateAt: Date;
-    }[]>;
+        data: {
+            id: number;
+            title: string;
+            description: string | null;
+            routepdf: string;
+            routeimg: string | null;
+            createAt: Date;
+            updateAt: Date;
+        }[];
+        totalPages: number;
+    }>;
+    getMyLibrary(req: any, query: any): Promise<{
+        data: ({
+            book: {
+                id: number;
+                title: string;
+                description: string | null;
+                routepdf: string;
+                routeimg: string | null;
+                createAt: Date;
+                updateAt: Date;
+            };
+        } & {
+            id: number;
+            saveeAt: Date;
+            bookId: number;
+            userId: number;
+            createdAt: Date;
+            updatedAt: Date;
+        })[];
+        totalPages: number;
+    }>;
     findOne(id: number): Promise<{
         id: number;
         title: string;
@@ -47,21 +71,27 @@ export declare class BookController {
         };
         message: string;
     }>;
-    save(req: any, bookId: number): Promise<{
-        id: number;
-        userId: number;
-        saveeAt: Date;
-        createdAt: Date;
-        updatedAt: Date;
-        bookId: number;
+    verifyLike(req: any, bookId: any): Promise<boolean>;
+    removeLike(req: any, bookId: any): Promise<{
+        message: string;
+        data: {
+            id: number;
+            saveeAt: Date;
+            bookId: number;
+            userId: number;
+            createdAt: Date;
+            updatedAt: Date;
+        }[];
     }>;
-    getMyLibrary(req: any): Promise<{
-        id: number;
-        title: string;
-        description: string | null;
-        routepdf: string;
-        routeimg: string | null;
-        createAt: Date;
-        updateAt: Date;
-    }[]>;
+    save(req: any, bookId: number): Promise<{
+        message: string;
+        data: {
+            id: number;
+            saveeAt: Date;
+            bookId: number;
+            userId: number;
+            createdAt: Date;
+            updatedAt: Date;
+        };
+    }>;
 }

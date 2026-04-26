@@ -16,32 +16,6 @@ let UserInventoryService = class UserInventoryService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(createUserInventoryDto) {
-        return await this.prisma.userInventory.create({
-            data: {
-                name: createUserInventoryDto.name,
-                lastname: createUserInventoryDto.lastname,
-                cedula: createUserInventoryDto.cedula,
-            },
-        });
-    }
-    async findAll() {
-        return await this.prisma.userInventory.findMany();
-    }
-    async findOne(id) {
-        return await this.prisma.userInventory.findUnique({
-            where: {
-                id,
-            },
-        });
-    }
-    async remove(id) {
-        return await this.prisma.userInventory.delete({
-            where: {
-                id,
-            },
-        });
-    }
 };
 exports.UserInventoryService = UserInventoryService;
 exports.UserInventoryService = UserInventoryService = __decorate([

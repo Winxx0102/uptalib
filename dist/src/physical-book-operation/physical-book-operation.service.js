@@ -18,11 +18,17 @@ let PhysicalBookOperationService = class PhysicalBookOperationService {
     }
     async findAllOperations(query) {
         let QUERY = {};
+        const limit = parseInt(query.limit) || 10;
+        const page = parseInt(query.page) || 1;
+        const skip = (page - 1) * limit;
         if (query.search != '') {
             QUERY.where = { OR: [{ book: { title: { contains: query.search } } }] };
         }
-        return await this.prisma.bookOperation.findMany({
-            ...QUERY, take: parseInt(query.limit), orderBy: {
+        const totalPages = await this.prisma.bookOperation.count({
+            where: QUERY.where
+        });
+        const data = await this.prisma.bookOperation.findMany({
+            ...QUERY, take: limit, skip, orderBy: {
                 createdAt: 'desc'
             }, include: {
                 book: {
@@ -33,6 +39,7 @@ let PhysicalBookOperationService = class PhysicalBookOperationService {
                 }
             }
         });
+        return { totalPages, data };
     }
     async addDrops(entriesDto) {
         const book = await this.prisma.physicalBook.update({
@@ -81,27 +88,44 @@ let PhysicalBookOperationService = class PhysicalBookOperationService {
     }
     async findAllLoans(query) {
         const QUERY = {};
+        const page = query.page || 1;
+        const limit = query.limit || 10;
+        const skip = (page - 1) * limit;
         if (query.search) {
-            QUERY.where = { data: { type: 'PRESTAMO' }, OR: [{ book: { title: { contains: query.search } } }] };
+            QUERY.where = { type: 'PRESTAMO', OR: [{ book: { title: { contains: query.search } } }] };
         }
-        QUERY.take = parseInt(query.limit) || 10;
-        console.log(QUERY);
-        return (await this.prisma.bookOperation.findMany({
-            ...QUERY, where: { ...QUERY.where, type: 'PRESTAMO' }, include: {
+        QUERY.take = parseInt(limit);
+        QUERY.skip = parseInt(skip);
+        const data = await this.prisma.bookOperation.findMany({
+            ...QUERY, where: { ...QUERY.where, wasSettled: false, type: 'PRESTAMO' }, include: {
                 book: {
                     select: {
                         title: true
                     }
-                }
+                },
             }
-        }));
+        });
+        const totalPages = await this.prisma.bookOperation.count({
+            where: { ...QUERY.where, type: 'PRESTAMO', wasSettled: false }
+        });
+        return { data, totalPages };
     }
     async settle(id) {
         const existingLoan = await this.prisma.bookOperation.findUnique({ where: { id } });
-        console.log(existingLoan);
-        const loan = await this.prisma.bookOperation.update({
-            where: { id: id }, data: {
+        await this.prisma.bookOperation.create({
+            data: {
+                bookId: existingLoan.bookId,
+                quantity: existingLoan.quantity,
+                observations: existingLoan.observations,
+                personId: existingLoan.personId,
+                personNames: existingLoan.personNames,
+                personSurNames: existingLoan.personSurNames,
                 type: 'DEVOLUCION',
+            }
+        });
+        const loan = await this.prisma.bookOperation.update({
+            where: { id }, data: {
+                wasSettled: true,
                 book: {
                     update: {
                         availableStock: {

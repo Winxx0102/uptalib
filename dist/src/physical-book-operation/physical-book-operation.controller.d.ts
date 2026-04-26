@@ -5,17 +5,21 @@ export declare class PhysicalBookOperationController {
     private readonly physicalBookOperationService;
     constructor(physicalBookOperationService: PhysicalBookOperationService);
     findAll(quer: any): Promise<{
-        id: string;
-        bookId: string;
-        type: import(".prisma/client").$Enums.OperationType;
-        quantity: number;
-        observations: string | null;
-        personId: string | null;
-        personNames: string;
-        personSurNames: string;
-        createdAt: Date;
-        updatedAt: Date;
-    }[]>;
+        totalPages: number;
+        data: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            bookId: string;
+            type: import(".prisma/client").$Enums.OperationType;
+            quantity: number;
+            observations: string | null;
+            personId: string | null;
+            wasSettled: boolean | null;
+            personNames: string;
+            personSurNames: string;
+        }[];
+    }>;
     addEntries(entriesDto: any): Promise<{
         status: string;
         message: string;
@@ -29,15 +33,16 @@ export declare class PhysicalBookOperationController {
         message: string;
         loan: {
             id: string;
+            createdAt: Date;
+            updatedAt: Date;
             bookId: string;
             type: import(".prisma/client").$Enums.OperationType;
             quantity: number;
             observations: string | null;
             personId: string | null;
+            wasSettled: boolean | null;
             personNames: string;
             personSurNames: string;
-            createdAt: Date;
-            updatedAt: Date;
         };
     }>;
     settle(id: any): Promise<{
@@ -45,17 +50,21 @@ export declare class PhysicalBookOperationController {
         message: string;
     }>;
     findAllLoans(query: any): Promise<{
-        id: string;
-        bookId: string;
-        type: import(".prisma/client").$Enums.OperationType;
-        quantity: number;
-        observations: string | null;
-        personId: string | null;
-        personNames: string;
-        personSurNames: string;
-        createdAt: Date;
-        updatedAt: Date;
-    }[]>;
+        data: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            bookId: string;
+            type: import(".prisma/client").$Enums.OperationType;
+            quantity: number;
+            observations: string | null;
+            personId: string | null;
+            wasSettled: boolean | null;
+            personNames: string;
+            personSurNames: string;
+        }[];
+        totalPages: number;
+    }>;
     findOne(id: string): string;
     update(id: string, updatePhysicalBookOperationDto: UpdatePhysicalBookOperationDto): string;
     remove(id: string): string;

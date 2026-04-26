@@ -17,34 +17,44 @@ let InventoryService = class InventoryService {
         this.prisma = prisma;
     }
     async create(createInventoryDto) {
-        return { item: await this.prisma.item.create({ data: createInventoryDto }), message: 'Item añadido' };
+        return { item: await this.prisma.item.create({ data: { typeId: createInventoryDto.typeId, name: createInventoryDto.name, description: createInventoryDto.description, code: createInventoryDto.code, availableStock: createInventoryDto.stock, totalStock: createInventoryDto.stock, status: 'DISPONIBLE' } }), message: 'Item añadido' };
     }
     async findAll(query) {
         const take = parseInt(query.limit) || 10;
         const search = query.search;
         const where = {};
+        const page = parseInt(query.page) || 1;
+        const skip = (page - 1) * take;
         if (search) {
-            where.OR = [
+            where.AND = [
                 {
                     name: { contains: search },
                 },
-                {
-                    description: { contains: search }
-                }
             ];
         }
-        return await this.prisma.item.findMany({ where, take });
+        if (query.type) {
+            if (!where.AND)
+                where.AND = [{ type: { name: { contains: query.type } } }];
+            else
+                where.AND.push({ type: { name: { contains: query.type } } });
+        }
+        const totalPages = Math.ceil(await this.prisma.item.count({ where }) / take);
+        const data = await this.prisma.item.findMany({
+            where, skip, take, include: {
+                type: true
+            }
+        });
+        return { data, totalPages };
     }
     findOne(id) {
         return `This action returns a #${id} inventorsyss`;
     }
     async edit(id, updateInventoryDto) {
-        const item = await this.prisma.item.update({ where: { id: id }, data: updateInventoryDto });
-        return { message: 'Item actualizasdo' };
+        return { item: await this.prisma.item.update({ where: { id }, data: { typeId: updateInventoryDto.typeId, name: updateInventoryDto.name, description: updateInventoryDto.description, code: updateInventoryDto.code, availableStock: updateInventoryDto.stock, totalStock: updateInventoryDto.stock, status: 'DISPONIBLE' } }), message: 'Item actualizado' };
     }
     async delete(id) {
-        const item = await this.prisma.item.delete({ where: { id: id } });
-        return { message: 'Item Eliminado' };
+        await this.prisma.itemOperation.deleteMany({ where: { itemId: id } });
+        return { item: await this.prisma.item.delete({ where: { id } }), message: 'Item Eliminado' };
     }
 };
 exports.InventoryService = InventoryService;

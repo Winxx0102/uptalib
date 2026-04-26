@@ -59,6 +59,7 @@ model BookOperation {
   quantity       Int
   observations   String?
   personId       String?
+  wasSettled     Boolean?      @default(false)
   personNames    String
   personSurNames String
   book           PhysicalBook  @relation(fields: [bookId], references: [id])
@@ -69,6 +70,12 @@ model BookOperation {
 }
 
 enum BookStatus {
+  DISPONIBLE
+  AGOTADO
+  MANTENIMIENTO
+}
+
+enum ItemStatus {
   DISPONIBLE
   AGOTADO
   MANTENIMIENTO
@@ -139,30 +146,42 @@ model SavedBook {
 
 //inventario
 
-model UserInventory {
-  id       Int    @id @default(autoincrement())
-  name     String
-  lastname String
-  cedula   Int
-  loans    Loan[]
-}
-
 model Item {
-  id          Int     @id @default(autoincrement())
-  name        String
-  description String?
-  stock       Int
-  routeimg    String?
-  loans       Loan[]
+  id             String     @id @default(cuid())
+  name           String
+  code           String?
+  description    String?
+  totalStock     Int
+  availableStock Int
+  type           ItemType   @relation(fields: [typeId], references: [id])
+  typeId         String
+  status         ItemStatus
+
+  itemOperations ItemOperation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Loan {
-  id       Int @id @default(autoincrement())
-  quantity Int @default(1)
+model ItemOperation {
+  id             String        @id @default(cuid())
+  itemId         String
+  type           OperationType
+  quantity       Int
+  observations   String?
+  personId       String?
+  wasSettled     Boolean?      @default(false)
+  personNames    String
+  personSurNames String
+  item           Item          @relation(fields: [itemId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 
-  userinventory   UserInventory @relation(fields: [userInventoryId], references: [id])
-  userInventoryId Int
+  @@index([itemId, createdAt])
+}
 
-  item   Item @relation(fields: [itemId], references: [id])
-  itemId Int
+model ItemType {
+  id    String @id @default(cuid())
+  name  String
+  items Item[]
 }

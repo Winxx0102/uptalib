@@ -15,26 +15,26 @@ import { Role } from "@/user/dto/user.dto";
 
 @Controller("user-inventory")
 export class UserInventoryController {
-  constructor(private readonly userInventoryService: UserInventoryService) {}
+  constructor(private readonly userInventoryService: UserInventoryService) { }
 
-  @Roles(Role.SUPERADMIN, Role.ADMIN)
-  @UseGuards(RolesGuard)
-  @Post()
-  create(@Body() createUserInventoryDto: CreateUserInventoryDto) {
-    return this.userInventoryService.create(createUserInventoryDto);
-  }
+  // @Roles(Role.SUPERADMIN, Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @Post()
+  // create(@Body() createUserInventoryDto: CreateUserInventoryDto) {
+  //   return this.userInventoryService.create(createUserInventoryDto);
+  // }
 
-  @Roles(Role.SUPERADMIN, Role.ADMIN)
-  @UseGuards(RolesGuard)
-  @Get()
-  findAll() {
-    return this.userInventoryService.findAll();
-  }
+  // @Roles(Role.SUPERADMIN, Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @Get()
+  // findAll() {
+  //   return this.userInventoryService.findAll();
+  // }
 
-  @Roles(Role.SUPERADMIN, Role.ADMIN)
-  @UseGuards(RolesGuard)
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.userInventoryService.remove(+id);
-  }
+  // @Roles(Role.SUPERADMIN, Role.ADMIN)
+  // @UseGuards(RolesGuard)
+  // @Delete(":id")
+  // remove(@Param("id") id: string) {
+  //   return this.userInventoryService.remove(+id);
+  // }
 }

@@ -11,6 +11,8 @@ import { PhysicalBooksModule } from './physical-books/physical-books.module';
 import { CategoryModule } from './category/category.module';
 import { AuthorModule } from './author/author.module';
 import { PhysicalBookOperationModule } from './physical-book-operation/physical-book-operation.module';
+import { ItemTypeModule } from './item-type/item-type.module';
+import { InventoryOperationModule } from './inventory-operation/inventory-operation.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -29,7 +31,9 @@ import { PhysicalBookOperationModule } from './physical-book-operation/physical-
     PhysicalBooksModule,
     CategoryModule,
     AuthorModule,
-    PhysicalBookOperationModule
+    PhysicalBookOperationModule,
+    ItemTypeModule,
+    InventoryOperationModule
   ],
 })
 export class AppModule { }

@@ -34,7 +34,7 @@ let AuthorController = class AuthorController {
         return this.authorService.update(+id, updateAuthorDto);
     }
     remove(id) {
-        return this.authorService.remove(+id);
+        return this.authorService.remove(id);
     }
 };
 exports.AuthorController = AuthorController;

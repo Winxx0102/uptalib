@@ -5,26 +5,68 @@ export declare class InventoryController {
     constructor(inventoryService: InventoryService);
     create(createInventoryDto: any, img: Express.Multer.File): Promise<{
         item: {
-            id: number;
+            id: string;
             name: string;
             description: string | null;
-            routeimg: string | null;
-            stock: number;
+            createdAt: Date;
+            updatedAt: Date;
+            code: string | null;
+            totalStock: number;
+            availableStock: number;
+            status: import(".prisma/client").$Enums.ItemStatus;
+            typeId: string;
         };
         message: string;
     }>;
     findAll(query: any): Promise<{
-        id: number;
-        name: string;
-        description: string | null;
-        routeimg: string | null;
-        stock: number;
-    }[]>;
-    findOne(id: number): string;
-    edit(id: number, updateInventoryDto: EditItemInventory): Promise<{
+        data: ({
+            type: {
+                id: string;
+                name: string;
+            };
+        } & {
+            id: string;
+            name: string;
+            description: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+            code: string | null;
+            totalStock: number;
+            availableStock: number;
+            status: import(".prisma/client").$Enums.ItemStatus;
+            typeId: string;
+        })[];
+        totalPages: number;
+    }>;
+    findOne(id: string): string;
+    edit(id: string, updateInventoryDto: EditItemInventory): Promise<{
+        item: {
+            id: string;
+            name: string;
+            description: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+            code: string | null;
+            totalStock: number;
+            availableStock: number;
+            status: import(".prisma/client").$Enums.ItemStatus;
+            typeId: string;
+        };
         message: string;
     }>;
-    delete(id: number): Promise<{
+    delete(id: string): Promise<{
+        item: {
+            id: string;
+            name: string;
+            description: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+            code: string | null;
+            totalStock: number;
+            availableStock: number;
+            status: import(".prisma/client").$Enums.ItemStatus;
+            typeId: string;
+        };
         message: string;
     }>;
 }

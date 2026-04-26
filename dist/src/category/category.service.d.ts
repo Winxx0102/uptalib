@@ -25,7 +25,7 @@ export declare class CategoryService {
         status: string;
         message: string;
     }>;
-    remove(id: number): Promise<{
+    remove(id: string): Promise<{
         status: string;
         message: string;
     }>;

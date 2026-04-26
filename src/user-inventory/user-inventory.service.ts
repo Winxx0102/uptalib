@@ -9,36 +9,36 @@ import { PrismaService } from 'prisma/prisma.service';
 export class UserInventoryService {
 
 
-constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
-  async create(createUserInventoryDto: CreateUserInventoryDto) {
-    return await this.prisma.userInventory.create({
-      data: {
-        name: createUserInventoryDto.name,
-        lastname: createUserInventoryDto.lastname,
-        cedula: createUserInventoryDto.cedula,
-      },
-    }); 
-  }
+  // async create(createUserInventoryDto: CreateUserInventoryDto) {
+  //   return await this.prisma.userInventory.create({
+  //     data: {
+  //       name: createUserInventoryDto.name,
+  //       lastname: createUserInventoryDto.lastname,
+  //       cedula: createUserInventoryDto.cedula,
+  //     },
+  //   }); 
+  // }
 
-  async findAll() {
-    return await this.prisma.userInventory.findMany();
-  }
+  // async findAll() {
+  //   return await this.prisma.userInventory.findMany();
+  // }
 
-  async findOne(id: number) {
-    return await this.prisma.userInventory.findUnique({
-      where: {
-        id,
-      },
-    });
-  }
+  // async findOne(id: number) {
+  //   return await this.prisma.userInventory.findUnique({
+  //     where: {
+  //       id,
+  //     },
+  //   });
+  // }
 
-  async remove(id: number) {
-    return await this.prisma.userInventory.delete({
-      where: {
-        id,
-      },
-    });
-  }
-  }
+  // async remove(id: number) {
+  //   return await this.prisma.userInventory.delete({
+  //     where: {
+  //       id,
+  //     },
+  //   });
+  // }
+}
 
