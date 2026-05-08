@@ -24,17 +24,37 @@ let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
+    findAll(query) {
+        return this.usersService.findAll(query);
+    }
     create(createUserDto) {
         return this.usersService.create(createUserDto);
     }
     getProfile(userId) {
         return this.usersService.findOne(userId);
     }
+    async getUserRole(req) {
+        const userId = req.user.userId;
+        return this.usersService.getUserRole(userId);
+    }
+    blockUser(id) {
+        return this.usersService.blockUser(id);
+    }
+    unBlockUser(id) {
+        return this.usersService.unBlockUser(id);
+    }
     async updateRole(id, role) {
         return this.usersService.updateRole(id, role);
     }
 };
 exports.UsersController = UsersController;
+__decorate([
+    (0, common_1.Get)(''),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Post)('register'),
     __param(0, (0, common_1.Body)()),
@@ -51,8 +71,32 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getProfile", null);
 __decorate([
+    (0, common_1.Get)('role'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getUserRole", null);
+__decorate([
+    (0, common_1.Patch)('block/:id'),
+    (0, roles_decorator_1.Roles)(user_dto_1.Role.ADMIN),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "blockUser", null);
+__decorate([
+    (0, common_1.Patch)('unblock/:id'),
+    (0, roles_decorator_1.Roles)(user_dto_1.Role.ADMIN),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "unBlockUser", null);
+__decorate([
     (0, common_1.Patch)('role/:id'),
-    (0, roles_decorator_1.Roles)(user_dto_1.Role.SUPERADMIN),
+    (0, roles_decorator_1.Roles)(user_dto_1.Role.ADMIN),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)('role')),

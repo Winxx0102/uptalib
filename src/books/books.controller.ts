@@ -42,9 +42,9 @@ export class BookController {
   @Roles(Role.SUPERADMIN, Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @UseInterceptors(FileInterceptor('pdf', storageFor1File))
-  create(@Body() data: any, @UploadedFile() file: Express.Multer.File) {
+  create(@Body() data: any, @Req() req, @UploadedFile() file: Express.Multer.File) {
     const filePath = `/public/uploads/pdf/${file.filename}`;
-    return this.bookService.create({ ...data, routepdf: filePath });
+    return this.bookService.create({ ...data, routepdf: filePath }, req);
   }
 
 
@@ -55,7 +55,7 @@ export class BookController {
   @Delete(':id')
   @Roles(Role.SUPERADMIN, Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  async delete(@Param('id', ParseIntPipe) id: number) {
+  async delete(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
 
     const book = await this.bookService.findOne(id);
 
@@ -77,7 +77,7 @@ export class BookController {
       }
     });
 
-    return this.bookService.delete(id);
+    return this.bookService.delete(id, req);
   }
 
 
@@ -88,7 +88,7 @@ export class BookController {
   async edit(
     @Param('id', ParseIntPipe) id: number,
     @Body() data: any,
-    @UploadedFile() pdfFile: Express.Multer.File,
+    @UploadedFile() pdfFile: Express.Multer.File, @Req() req: any
 
   ) {
     // Obtener el libro existente para eliminar archivos antiguos
@@ -115,7 +115,7 @@ export class BookController {
       updateData = { ...data, routepdf: `/public/uploads/pdf/${pdfFile.filename}` };
     }
 
-    return this.bookService.edit(id, updateData);
+    return this.bookService.edit(id, updateData, req);
   }
 
 

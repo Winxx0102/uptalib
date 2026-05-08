@@ -3,11 +3,38 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { Role } from '@prisma/client'; // Importamos el enum real de Prisma
+import { getPagination } from '@/functions/pagination/getPagination';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) { }
 
+  async findAll(query: any) {
+    const search = query.search || ''
+    const where: any = {}
+    const { take, page, skip } = getPagination(query)
+
+    if (query.search) {
+      where.OR = [
+        { name: { contains: search } },
+        { email: { contains: search } }
+      ]
+    }
+
+    const data = await this.prisma.user.findMany({ where, take, skip })
+    const totalPages = await this.prisma.user.count({ where })
+
+    return { data, totalPages }
+  }
+
+  async blockUser(id: number) {
+    const user = await this.prisma.user.update({ where: { id }, data: { isBlocked: true } })
+    return { status: 'success', message: 'Usuario Bloqueado' }
+  }
+  async unBlockUser(id: number) {
+    const user = await this.prisma.user.update({ where: { id }, data: { isBlocked: false } })
+    return { status: 'success', message: 'Usuario Desbloqueado' }
+  }
 
   async create(createUserDto: CreateUserDto) {
     const { email, password, name } = createUserDto;
@@ -67,6 +94,12 @@ export class UsersService {
     } catch (error) {
       throw new NotFoundException(`No se encontró el usuario con ID ${id}`);
     }
+  }
+
+  async getUserRole(id: number) {
+    const role = await this.prisma.user.findUnique({ where: { id } })
+    return { role: role.role }
+
   }
 
 

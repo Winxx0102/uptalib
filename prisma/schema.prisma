@@ -69,6 +69,16 @@ model BookOperation {
   @@index([bookId, createdAt])
 }
 
+model Operation {
+  id        String   @id @default(cuid())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  ip        String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum BookStatus {
   DISPONIBLE
   AGOTADO
@@ -103,12 +113,14 @@ enum OperationType {
 //usuarios,roles y libros guardados xd
 
 model User {
-  id       Int         @id @default(autoincrement())
-  email    String      @unique
-  name     String
-  password String
-  role     Role        @default(USER)
-  saves    SavedBook[]
+  id         Int         @id @default(autoincrement())
+  email      String      @unique
+  name       String
+  password   String
+  isBlocked  Boolean     @default(false)
+  role       Role        @default(USER)
+  saves      SavedBook[]
+  operations Operation[]
 }
 
 enum Role {

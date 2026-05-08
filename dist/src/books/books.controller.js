@@ -36,11 +36,11 @@ let BookController = class BookController {
     findOne(id) {
         return this.bookService.findOne(id);
     }
-    create(data, file) {
+    create(data, req, file) {
         const filePath = `/public/uploads/pdf/${file.filename}`;
-        return this.bookService.create({ ...data, routepdf: filePath });
+        return this.bookService.create({ ...data, routepdf: filePath }, req);
     }
-    async delete(id) {
+    async delete(id, req) {
         const book = await this.bookService.findOne(id);
         if (!book) {
             throw new common_1.NotFoundException('El libro no existe');
@@ -54,9 +54,9 @@ let BookController = class BookController {
                 }
             }
         });
-        return this.bookService.delete(id);
+        return this.bookService.delete(id, req);
     }
-    async edit(id, data, pdfFile) {
+    async edit(id, data, pdfFile, req) {
         const existingBook = await this.bookService.findOne(id);
         if (!existingBook) {
             throw new common_1.NotFoundException('El libro no existe');
@@ -74,7 +74,7 @@ let BookController = class BookController {
             });
             updateData = { ...data, routepdf: `/public/uploads/pdf/${pdfFile.filename}` };
         }
-        return this.bookService.edit(id, updateData);
+        return this.bookService.edit(id, updateData, req);
     }
     verifyLike(req, bookId) {
         return this.bookService.getVerifyLike(req.user.userId, bookId);
@@ -118,9 +118,10 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('pdf', storage_1.storageFor1File)),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, Object, Object]),
     __metadata("design:returntype", void 0)
 ], BookController.prototype, "create", null);
 __decorate([
@@ -128,8 +129,9 @@ __decorate([
     (0, roles_decorator_1.Roles)(client_1.Role.SUPERADMIN, client_1.Role.ADMIN),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], BookController.prototype, "delete", null);
 __decorate([
@@ -140,8 +142,9 @@ __decorate([
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.UploadedFile)()),
+    __param(3, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object, Object]),
+    __metadata("design:paramtypes", [Number, Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], BookController.prototype, "edit", null);
 __decorate([

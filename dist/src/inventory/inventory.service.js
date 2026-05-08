@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.InventoryService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../../prisma/prisma.service");
+const getPagination_1 = require("../functions/pagination/getPagination");
 let InventoryService = class InventoryService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -20,11 +21,9 @@ let InventoryService = class InventoryService {
         return { item: await this.prisma.item.create({ data: { typeId: createInventoryDto.typeId, name: createInventoryDto.name, description: createInventoryDto.description, code: createInventoryDto.code, availableStock: createInventoryDto.stock, totalStock: createInventoryDto.stock, status: 'DISPONIBLE' } }), message: 'Item añadido' };
     }
     async findAll(query) {
-        const take = parseInt(query.limit) || 10;
         const search = query.search;
         const where = {};
-        const page = parseInt(query.page) || 1;
-        const skip = (page - 1) * take;
+        const { take, page, skip } = (0, getPagination_1.getPagination)(query);
         if (search) {
             where.AND = [
                 {

@@ -8,6 +8,11 @@ import { Response } from 'express';
 export class AuthService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) { }
 
+  logout(res: any) {
+    res.clearCookie('jwt')
+    return { message: 'Sesión Cerrada', status: 'success' }
+
+  }
   async login(email: string, pass: string, res: Response) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new UnauthorizedException('Usuario no encontrado');

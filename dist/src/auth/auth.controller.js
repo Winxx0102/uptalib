@@ -24,6 +24,9 @@ let AuthController = class AuthController {
     login(loginDto, res) {
         return this.authService.login(loginDto.email, loginDto.password, res);
     }
+    logout(res) {
+        return this.authService.logout(res);
+    }
     verifySession() {
         return {
             state: 'success',
@@ -41,6 +44,14 @@ __decorate([
     __metadata("design:paramtypes", [login_dto_1.LoginDto, Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.Get)('logout'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Res)({ passthrough: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "logout", null);
 __decorate([
     (0, common_1.Get)('verify-session'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),

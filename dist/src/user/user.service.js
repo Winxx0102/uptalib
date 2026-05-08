@@ -46,9 +46,32 @@ exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../../prisma/prisma.service");
 const bcrypt = __importStar(require("bcrypt"));
+const getPagination_1 = require("../functions/pagination/getPagination");
 let UsersService = class UsersService {
     constructor(prisma) {
         this.prisma = prisma;
+    }
+    async findAll(query) {
+        const search = query.search || '';
+        const where = {};
+        const { take, page, skip } = (0, getPagination_1.getPagination)(query);
+        if (query.search) {
+            where.OR = [
+                { name: { contains: search } },
+                { email: { contains: search } }
+            ];
+        }
+        const data = await this.prisma.user.findMany({ where, take, skip });
+        const totalPages = await this.prisma.user.count({ where });
+        return { data, totalPages };
+    }
+    async blockUser(id) {
+        const user = await this.prisma.user.update({ where: { id }, data: { isBlocked: true } });
+        return { status: 'success', message: 'Usuario Bloqueado' };
+    }
+    async unBlockUser(id) {
+        const user = await this.prisma.user.update({ where: { id }, data: { isBlocked: false } });
+        return { status: 'success', message: 'Usuario Desbloqueado' };
     }
     async create(createUserDto) {
         const { email, password, name } = createUserDto;
@@ -100,6 +123,10 @@ let UsersService = class UsersService {
         catch (error) {
             throw new common_1.NotFoundException(`No se encontró el usuario con ID ${id}`);
         }
+    }
+    async getUserRole(id) {
+        const role = await this.prisma.user.findUnique({ where: { id } });
+        return { role: role.role };
     }
     async findOne(id) {
         const user = await this.prisma.user.findUnique({

@@ -112,13 +112,13 @@ let InventoryOperationService = class InventoryOperationService {
         const skip = (page - 1) * limit;
         if (query.search) {
             where.OR = [
-                { name: { contains: query.search } }
+                { item: { name: { contains: query.search } } }
             ];
         }
         const data = await this.prisma.itemOperation.findMany({
             where: { ...where, type: 'PRESTAMO', wasSettled: false }, include: { item: true }, skip, take: limit
         });
-        const totalPages = Math.ceil(await this.prisma.itemOperation.count({ where: { ...where, type: 'PRESTAMO', wasSettled: false } }) / limit);
+        const totalPages = Math.ceil(await this.prisma.itemOperation.count({ where: { ...where, type: 'PRESTAMO', wasSettled: false }, orderBy: { createdAt: 'desc' } }) / limit);
         return { data, totalPages };
     }
     async findAll(query) {
@@ -128,7 +128,7 @@ let InventoryOperationService = class InventoryOperationService {
         const skip = (page - 1) * take;
         if (query.search) {
             where.AND = [
-                { item: { title: { contains: query.search } } }
+                { item: { name: { contains: query.search } } }
             ];
         }
         const totalPages = await this.prisma.itemOperation.count({

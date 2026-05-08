@@ -13,6 +13,12 @@ export class AuthController {
   login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     return this.authService.login(loginDto.email, loginDto.password, res);
   }
+  @Get('logout')
+  @UseGuards(JwtAuthGuard)
+  logout(@Res({ passthrough: true }) res: any) {
+    return this.authService.logout(res)
+  }
+
   @Get('verify-session')
   @UseGuards(JwtAuthGuard)
   verifySession() {

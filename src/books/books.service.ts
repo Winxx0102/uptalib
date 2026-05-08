@@ -44,21 +44,28 @@ export class BookService {
       where,
     })
 
+
     return { data, totalPages }
 
 
   }
-  async create(data: any) {
+  async create(data: any, req: any) {
     const book = await this.prisma.book.create({ data })
+
+    await this.prisma.operation.create({ data: { userId: req.user.userId, ip: req.ip, action: `creó el libro Digital ${data.title}` } })
     return { message: 'Libro Creado' };
   }
 
-  async delete(id: number) {
+  async delete(id: number, req: any) {
+    const book = await this.prisma.book.findFirst({ where: { id } })
+
+    await this.prisma.operation.create({ data: { userId: req.user.userId, ip: req.ip, action: `Eliminó el libro Digital ${book.title}` } })
     return { book: await this.prisma.book.delete({ where: { id } }), message: 'Libro Eliminado' }
   }
 
-  async edit(id: number, data: bookUpdate) {
-
+  async edit(id: number, data: bookUpdate, req: any) {
+    const book = await this.prisma.book.findFirst({ where: { id } })
+    await this.prisma.operation.create({ data: { userId: req.user.userId, ip: req.ip, action: `Editó el libro Digital ${book.title}` } })
     return { book: await this.prisma.book.update({ where: { id }, data: data }), message: 'Libro editado' }
   }
 

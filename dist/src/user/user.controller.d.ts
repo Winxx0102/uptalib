@@ -3,6 +3,17 @@ import { CreateUserDto, Role } from './dto/user.dto';
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
+    findAll(query: any): Promise<{
+        data: {
+            id: number;
+            email: string;
+            name: string;
+            password: string;
+            isBlocked: boolean;
+            role: import(".prisma/client").$Enums.Role;
+        }[];
+        totalPages: number;
+    }>;
     create(createUserDto: CreateUserDto): Promise<{
         id: number;
         email: string;
@@ -23,15 +34,27 @@ export declare class UsersController {
         } & {
             id: number;
             userId: number;
-            saveeAt: Date;
             createdAt: Date;
             updatedAt: Date;
+            saveeAt: Date;
             bookId: number;
         })[];
         id: number;
         email: string;
         name: string;
+        isBlocked: boolean;
         role: import(".prisma/client").$Enums.Role;
+    }>;
+    getUserRole(req: any): Promise<{
+        role: import(".prisma/client").$Enums.Role;
+    }>;
+    blockUser(id: number): Promise<{
+        status: string;
+        message: string;
+    }>;
+    unBlockUser(id: number): Promise<{
+        status: string;
+        message: string;
     }>;
     updateRole(id: number, role: Role): Promise<{
         id: number;

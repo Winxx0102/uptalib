@@ -27,11 +27,11 @@ export declare class BookController {
             };
         } & {
             id: number;
-            saveeAt: Date;
-            bookId: number;
             userId: number;
             createdAt: Date;
             updatedAt: Date;
+            saveeAt: Date;
+            bookId: number;
         })[];
         totalPages: number;
     }>;
@@ -44,10 +44,10 @@ export declare class BookController {
         createAt: Date;
         updateAt: Date;
     }>;
-    create(data: any, file: Express.Multer.File): Promise<{
+    create(data: any, req: any, file: Express.Multer.File): Promise<{
         message: string;
     }>;
-    delete(id: number): Promise<{
+    delete(id: number, req: any): Promise<{
         book: {
             id: number;
             title: string;
@@ -59,7 +59,7 @@ export declare class BookController {
         };
         message: string;
     }>;
-    edit(id: number, data: any, pdfFile: Express.Multer.File): Promise<{
+    edit(id: number, data: any, pdfFile: Express.Multer.File, req: any): Promise<{
         book: {
             id: number;
             title: string;
@@ -76,22 +76,22 @@ export declare class BookController {
         message: string;
         data: {
             id: number;
-            saveeAt: Date;
-            bookId: number;
             userId: number;
             createdAt: Date;
             updatedAt: Date;
+            saveeAt: Date;
+            bookId: number;
         }[];
     }>;
     save(req: any, bookId: number): Promise<{
         message: string;
         data: {
             id: number;
-            saveeAt: Date;
-            bookId: number;
             userId: number;
             createdAt: Date;
             updatedAt: Date;
+            saveeAt: Date;
+            bookId: number;
         };
     }>;
 }

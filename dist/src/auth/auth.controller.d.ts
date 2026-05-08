@@ -8,6 +8,10 @@ export declare class AuthController {
         state: string;
         message: string;
     }>;
+    logout(res: any): {
+        message: string;
+        status: string;
+    };
     verifySession(): {
         state: string;
         message: string;

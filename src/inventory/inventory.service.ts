@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateItemInventory } from './dto/create-item-dto';
 import { EditItemInventory } from './dto/edit-item-dto';
+import { getPagination } from '@/functions/pagination/getPagination';
 
 
 @Injectable()
@@ -13,13 +14,12 @@ export class InventoryService {
   }
 
   async findAll(query: any) {
-    const take = parseInt(query.limit) || 10;
+
     const search = query.search
     const where: any = {}
 
     //pagination stuff
-    const page = parseInt(query.page) || 1
-    const skip = (page - 1) * take
+    const { take, page, skip } = getPagination(query)
 
 
     if (search) {

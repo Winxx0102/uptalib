@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, ParseIntPipe, UseGuards, Get } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, ParseIntPipe, UseGuards, Get, Req, Query } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { CreateUserDto, Role } from './dto/user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -10,6 +10,11 @@ import { GetUser } from '../auth/decorators/get-user.decorator';
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
+
+  @Get('')
+  findAll(@Query() query) {
+    return this.usersService.findAll(query)
+  }
 
   @Post('register')
   create(@Body() createUserDto: CreateUserDto) {
@@ -23,9 +28,28 @@ export class UsersController {
     return this.usersService.findOne(userId);
   }
 
+  @Get('role')
+  @UseGuards(JwtAuthGuard)
+  async getUserRole(@Req() req) {
+    const userId = req.user.userId
+
+    return this.usersService.getUserRole(userId)
+  }
+
+  @Patch('block/:id')
+  @Roles(Role.ADMIN)
+  blockUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.blockUser(id)
+  }
+
+  @Patch('unblock/:id')
+  @Roles(Role.ADMIN)
+  unBlockUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.unBlockUser(id)
+  }
 
   @Patch('role/:id')
-  @Roles(Role.SUPERADMIN)
+  @Roles(Role.ADMIN)
   @UseGuards(JwtAuthGuard, RolesGuard)
   async updateRole(
     @Param('id', ParseIntPipe) id: number,

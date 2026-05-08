@@ -13,6 +13,7 @@ import { AuthorModule } from './author/author.module';
 import { PhysicalBookOperationModule } from './physical-book-operation/physical-book-operation.module';
 import { ItemTypeModule } from './item-type/item-type.module';
 import { InventoryOperationModule } from './inventory-operation/inventory-operation.module';
+import { LogsModule } from './logs/logs.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -33,7 +34,8 @@ import { InventoryOperationModule } from './inventory-operation/inventory-operat
     AuthorModule,
     PhysicalBookOperationModule,
     ItemTypeModule,
-    InventoryOperationModule
+    InventoryOperationModule,
+    LogsModule
   ],
 })
 export class AppModule { }

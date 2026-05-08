@@ -52,6 +52,10 @@ let AuthService = class AuthService {
         this.prisma = prisma;
         this.jwtService = jwtService;
     }
+    logout(res) {
+        res.clearCookie('jwt');
+        return { message: 'Sesión Cerrada', status: 'success' };
+    }
     async login(email, pass, res) {
         const user = await this.prisma.user.findUnique({ where: { email } });
         if (!user)

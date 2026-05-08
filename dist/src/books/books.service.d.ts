@@ -29,10 +29,10 @@ export declare class BookService {
         }[];
         totalPages: number;
     }>;
-    create(data: any): Promise<{
+    create(data: any, req: any): Promise<{
         message: string;
     }>;
-    delete(id: number): Promise<{
+    delete(id: number, req: any): Promise<{
         book: {
             id: number;
             title: string;
@@ -44,7 +44,7 @@ export declare class BookService {
         };
         message: string;
     }>;
-    edit(id: number, data: bookUpdate): Promise<{
+    edit(id: number, data: bookUpdate, req: any): Promise<{
         book: {
             id: number;
             title: string;
@@ -60,22 +60,22 @@ export declare class BookService {
         message: string;
         data: {
             id: number;
-            saveeAt: Date;
+            userId: number;
             createdAt: Date;
             updatedAt: Date;
+            saveeAt: Date;
             bookId: number;
-            userId: number;
         };
     }>;
     removeFromUser(userId: number, bookId: number): Promise<{
         message: string;
         data: {
             id: number;
-            saveeAt: Date;
+            userId: number;
             createdAt: Date;
             updatedAt: Date;
+            saveeAt: Date;
             bookId: number;
-            userId: number;
         }[];
     }>;
     getVerifyLike(userId: any, bookId: any): Promise<boolean>;
@@ -92,11 +92,11 @@ export declare class BookService {
             };
         } & {
             id: number;
-            saveeAt: Date;
+            userId: number;
             createdAt: Date;
             updatedAt: Date;
+            saveeAt: Date;
             bookId: number;
-            userId: number;
         })[];
         totalPages: number;
     }>;
