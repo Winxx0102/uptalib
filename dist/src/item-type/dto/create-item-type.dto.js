@@ -15,8 +15,8 @@ class CreateItemTypeDto {
 }
 exports.CreateItemTypeDto = CreateItemTypeDto;
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(3),
+    (0, class_validator_1.IsString)({ message: 'El tipo debe ser una cadena de texto' }),
+    (0, class_validator_1.MinLength)(3, { message: 'El tipo debe tener como minimo 3 caracteres de longitud' }),
     __metadata("design:type", String)
 ], CreateItemTypeDto.prototype, "name", void 0);
 //# sourceMappingURL=create-item-type.dto.js.map

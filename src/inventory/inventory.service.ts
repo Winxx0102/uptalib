@@ -1,15 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateItemInventory } from './dto/create-item-dto';
 import { EditItemInventory } from './dto/edit-item-dto';
 import { getPagination } from '@/functions/pagination/getPagination';
+import { CreateInventoryDto } from './dto/create-inventory.dto';
+import { UpdateInventory } from './dto/update-inventory.dto';
 
 
 @Injectable()
 export class InventoryService {
   constructor(private prisma: PrismaService) { }
-  async create(createInventoryDto: any) {
+  async create(createInventoryDto: CreateInventoryDto) {
+    const type = await this.prisma.itemType.findUnique({ where: { id: createInventoryDto.typeId } })
+    if (!type) return { status: 'error', message: 'Debes ingresar un tipo valido' }
+
     return { item: await this.prisma.item.create({ data: { typeId: createInventoryDto.typeId, name: createInventoryDto.name, description: createInventoryDto.description, code: createInventoryDto.code, availableStock: createInventoryDto.stock, totalStock: createInventoryDto.stock, status: 'DISPONIBLE' } }), message: 'Item añadido' };
   }
 
@@ -49,7 +54,10 @@ export class InventoryService {
     return `This action returns a #${id} inventorsyss`;
   }
 
-  async edit(id: string, updateInventoryDto: any) {
+  async edit(id: string, updateInventoryDto: UpdateInventory) {
+
+    const type = await this.prisma.itemType.findUnique({ where: { id: updateInventoryDto.typeId } })
+    if (!type) return { status: 'error', message: 'Debes ingresar un tipo valido' }
 
     return { item: await this.prisma.item.update({ where: { id }, data: { typeId: updateInventoryDto.typeId, name: updateInventoryDto.name, description: updateInventoryDto.description, code: updateInventoryDto.code, availableStock: updateInventoryDto.stock, totalStock: updateInventoryDto.stock, status: 'DISPONIBLE' } }), message: 'Item actualizado' };
   }

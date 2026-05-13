@@ -15,8 +15,9 @@ class CreateCategoryDto {
 }
 exports.CreateCategoryDto = CreateCategoryDto;
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(3),
+    (0, class_validator_1.IsString)({ message: 'La categoría debe ser una cadena de texto' }),
+    (0, class_validator_1.MinLength)(3, { message: 'El nombre de la categoría debe tener como mínimo 3 carácteres' }),
+    (0, class_validator_1.MaxLength)(20, { message: 'El nombre de la categoría debe tener un máximo de 20 carácteres' }),
     __metadata("design:type", String)
 ], CreateCategoryDto.prototype, "name", void 0);
 //# sourceMappingURL=create-category.dto.js.map

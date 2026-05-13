@@ -1,6 +1,8 @@
 import { PhysicalBookOperationService } from './physical-book-operation.service';
 import { UpdatePhysicalBookOperationDto } from './dto/update-physical-book-operation.dto';
-import { MakeLoanDto } from './dto/makeLoan.dto';
+import { EntrieDto } from './dto/entrie-dto';
+import { DropDto } from './dto/drop-dto';
+import { LoanDto } from './dto/loan-dto';
 export declare class PhysicalBookOperationController {
     private readonly physicalBookOperationService;
     constructor(physicalBookOperationService: PhysicalBookOperationService);
@@ -8,8 +10,6 @@ export declare class PhysicalBookOperationController {
         totalPages: number;
         data: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             bookId: string;
             type: import(".prisma/client").$Enums.OperationType;
             quantity: number;
@@ -18,23 +18,23 @@ export declare class PhysicalBookOperationController {
             wasSettled: boolean | null;
             personNames: string;
             personSurNames: string;
+            createdAt: Date;
+            updatedAt: Date;
         }[];
     }>;
-    addEntries(entriesDto: any): Promise<{
+    addEntries(entriesDto: EntrieDto): Promise<{
         status: string;
         message: string;
     }>;
-    addDrops(entriesDto: any): Promise<{
+    addDrops(entriesDto: DropDto): Promise<{
         status: string;
         message: string;
     }>;
-    loan(makeLoanDto: MakeLoanDto): Promise<{
+    loan(makeLoanDto: LoanDto): Promise<{
         state: string;
         message: string;
         loan: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             bookId: string;
             type: import(".prisma/client").$Enums.OperationType;
             quantity: number;
@@ -43,6 +43,8 @@ export declare class PhysicalBookOperationController {
             wasSettled: boolean | null;
             personNames: string;
             personSurNames: string;
+            createdAt: Date;
+            updatedAt: Date;
         };
     }>;
     settle(id: any): Promise<{
@@ -52,8 +54,6 @@ export declare class PhysicalBookOperationController {
     findAllLoans(query: any): Promise<{
         data: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             bookId: string;
             type: import(".prisma/client").$Enums.OperationType;
             quantity: number;
@@ -62,6 +62,8 @@ export declare class PhysicalBookOperationController {
             wasSettled: boolean | null;
             personNames: string;
             personSurNames: string;
+            createdAt: Date;
+            updatedAt: Date;
         }[];
         totalPages: number;
     }>;

@@ -18,16 +18,12 @@ const inventory_service_1 = require("./inventory.service");
 const edit_item_dto_1 = require("./dto/edit-item-dto");
 const platform_express_1 = require("@nestjs/platform-express");
 const storage_1 = require("../books/utils/storage");
+const create_inventory_dto_1 = require("./dto/create-inventory.dto");
 let InventoryController = class InventoryController {
     constructor(inventoryService) {
         this.inventoryService = inventoryService;
     }
     create(createInventoryDto, img) {
-        createInventoryDto.stock = parseInt(createInventoryDto.stock);
-        if (img) {
-            const imgPath = `/public/uploads/img/${img.filename}`;
-            return this.inventoryService.create({ ...createInventoryDto, routeimg: imgPath });
-        }
         return this.inventoryService.create(createInventoryDto);
     }
     findAll(query) {
@@ -50,7 +46,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [create_inventory_dto_1.CreateInventoryDto, Object]),
     __metadata("design:returntype", void 0)
 ], InventoryController.prototype, "create", null);
 __decorate([

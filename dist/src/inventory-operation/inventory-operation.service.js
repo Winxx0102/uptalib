@@ -23,17 +23,17 @@ let InventoryOperationService = class InventoryOperationService {
         const book = await this.prisma.item.update({
             where: { id: entriesDto.itemId }, data: {
                 availableStock: {
-                    decrement: parseInt(entriesDto.quantity)
+                    decrement: entriesDto.quantity
                 },
                 totalStock: {
-                    decrement: parseInt(entriesDto.quantity)
+                    decrement: entriesDto.quantity
                 }
             }
         });
         await this.prisma.itemOperation.create({
             data: {
                 itemId: entriesDto.itemId,
-                quantity: parseInt(entriesDto.quantity),
+                quantity: entriesDto.quantity,
                 type: 'BAJA',
                 personNames: entriesDto.personNames,
                 personSurNames: entriesDto.personSurNames
@@ -45,17 +45,17 @@ let InventoryOperationService = class InventoryOperationService {
         const book = await this.prisma.item.update({
             where: { id: entriesDto.itemId }, data: {
                 availableStock: {
-                    increment: parseInt(entriesDto.quantity)
+                    increment: entriesDto.quantity
                 },
                 totalStock: {
-                    increment: parseInt(entriesDto.quantity)
+                    increment: entriesDto.quantity
                 }
             }
         });
         await this.prisma.itemOperation.create({
             data: {
                 itemId: entriesDto.itemId,
-                quantity: parseInt(entriesDto.quantity),
+                quantity: entriesDto.quantity,
                 type: 'ENTRADA',
                 personNames: entriesDto.personNames,
                 personSurNames: entriesDto.personSurNames
@@ -67,7 +67,7 @@ let InventoryOperationService = class InventoryOperationService {
         const loan = await this.prisma.itemOperation.create({
             data: {
                 type: 'PRESTAMO',
-                quantity: parseInt(itemLoan.quantity),
+                quantity: itemLoan.quantity,
                 itemId: itemLoan.itemId,
                 personId: itemLoan.personId,
                 personNames: itemLoan.personNames,
@@ -76,7 +76,7 @@ let InventoryOperationService = class InventoryOperationService {
         });
         await this.prisma.item.update({
             where: { id: itemLoan.itemId }, data: {
-                availableStock: { decrement: parseInt(itemLoan.quantity) }
+                availableStock: { decrement: itemLoan.quantity }
             }
         });
         return { status: 'success', message: 'Prestamo Registrado' };

@@ -45,17 +45,17 @@ let PhysicalBookOperationService = class PhysicalBookOperationService {
         const book = await this.prisma.physicalBook.update({
             where: { id: entriesDto.bookId }, data: {
                 availableStock: {
-                    decrement: parseInt(entriesDto.quantity)
+                    decrement: entriesDto.quantity
                 },
                 totalStock: {
-                    decrement: parseInt(entriesDto.quantity)
+                    decrement: entriesDto.quantity
                 }
             }
         });
         await this.prisma.bookOperation.create({
             data: {
                 bookId: entriesDto.bookId,
-                quantity: parseInt(entriesDto.quantity),
+                quantity: entriesDto.quantity,
                 type: 'BAJA',
                 personNames: entriesDto.personNames,
                 personSurNames: entriesDto.personSurNames
@@ -68,17 +68,17 @@ let PhysicalBookOperationService = class PhysicalBookOperationService {
         const book = await this.prisma.physicalBook.update({
             where: { id: entriesDto.bookId }, data: {
                 availableStock: {
-                    increment: parseInt(entriesDto.quantity)
+                    increment: entriesDto.quantity
                 },
                 totalStock: {
-                    increment: parseInt(entriesDto.quantity)
+                    increment: entriesDto.quantity
                 }
             }
         });
         await this.prisma.bookOperation.create({
             data: {
                 bookId: entriesDto.bookId,
-                quantity: parseInt(entriesDto.quantity),
+                quantity: entriesDto.quantity,
                 type: 'ENTRADA',
                 personNames: entriesDto.personNames,
                 personSurNames: entriesDto.personSurNames

@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CreateInventoryOperationDto } from './dto/create-inventory-operation.dto';
 import { UpdateInventoryOperationDto } from './dto/update-inventory-operation.dto';
 import { PrismaService } from 'prisma/prisma.service';
+import { LoanDto } from './dto/loan-dto';
+import { EntrieDto } from './dto/entrie-dto';
+import { DropDto } from './dto/drop-dto';
 
 @Injectable()
 export class InventoryOperationService {
@@ -10,14 +13,14 @@ export class InventoryOperationService {
     return 'This action adds a new inventoryOperation';
   }
 
-  async addDrops(entriesDto: any) {
+  async addDrops(entriesDto: DropDto) {
     const book = await this.prisma.item.update({
       where: { id: entriesDto.itemId }, data: {
         availableStock: {
-          decrement: parseInt(entriesDto.quantity)
+          decrement: entriesDto.quantity
         },
         totalStock: {
-          decrement: parseInt(entriesDto.quantity)
+          decrement: entriesDto.quantity
         }
       }
     })
@@ -25,7 +28,7 @@ export class InventoryOperationService {
     await this.prisma.itemOperation.create({
       data: {
         itemId: entriesDto.itemId,
-        quantity: parseInt(entriesDto.quantity),
+        quantity: entriesDto.quantity,
         type: 'BAJA',
         personNames: entriesDto.personNames,
         personSurNames: entriesDto.personSurNames
@@ -36,16 +39,16 @@ export class InventoryOperationService {
     return { status: 'success', message: 'Bajas añadidas' }
   }
 
-  async addEntries(entriesDto: any) {
+  async addEntries(entriesDto: EntrieDto) {
 
 
     const book = await this.prisma.item.update({
       where: { id: entriesDto.itemId }, data: {
         availableStock: {
-          increment: parseInt(entriesDto.quantity)
+          increment: entriesDto.quantity
         },
         totalStock: {
-          increment: parseInt(entriesDto.quantity)
+          increment: entriesDto.quantity
         }
       }
     })
@@ -53,7 +56,7 @@ export class InventoryOperationService {
     await this.prisma.itemOperation.create({
       data: {
         itemId: entriesDto.itemId,
-        quantity: parseInt(entriesDto.quantity),
+        quantity: entriesDto.quantity,
         type: 'ENTRADA',
         personNames: entriesDto.personNames,
         personSurNames: entriesDto.personSurNames
@@ -65,11 +68,11 @@ export class InventoryOperationService {
   }
 
 
-  async loan(itemLoan: any) {
+  async loan(itemLoan: LoanDto) {
     const loan = await this.prisma.itemOperation.create({
       data: {
         type: 'PRESTAMO',
-        quantity: parseInt(itemLoan.quantity),
+        quantity: itemLoan.quantity,
         itemId: itemLoan.itemId,
         personId: itemLoan.personId,
         personNames: itemLoan.personNames,
@@ -80,7 +83,7 @@ export class InventoryOperationService {
 
     await this.prisma.item.update({
       where: { id: itemLoan.itemId }, data: {
-        availableStock: { decrement: parseInt(itemLoan.quantity) }
+        availableStock: { decrement: itemLoan.quantity }
       }
     })
 

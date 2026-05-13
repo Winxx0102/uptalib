@@ -16,7 +16,9 @@ exports.PhysicalBookOperationController = void 0;
 const common_1 = require("@nestjs/common");
 const physical_book_operation_service_1 = require("./physical-book-operation.service");
 const update_physical_book_operation_dto_1 = require("./dto/update-physical-book-operation.dto");
-const makeLoan_dto_1 = require("./dto/makeLoan.dto");
+const entrie_dto_1 = require("./dto/entrie-dto");
+const drop_dto_1 = require("./dto/drop-dto");
+const loan_dto_1 = require("./dto/loan-dto");
 let PhysicalBookOperationController = class PhysicalBookOperationController {
     constructor(physicalBookOperationService) {
         this.physicalBookOperationService = physicalBookOperationService;
@@ -62,21 +64,21 @@ __decorate([
     (0, common_1.Patch)('entries'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [entrie_dto_1.EntrieDto]),
     __metadata("design:returntype", void 0)
 ], PhysicalBookOperationController.prototype, "addEntries", null);
 __decorate([
     (0, common_1.Patch)('drops'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [drop_dto_1.DropDto]),
     __metadata("design:returntype", void 0)
 ], PhysicalBookOperationController.prototype, "addDrops", null);
 __decorate([
     (0, common_1.Post)('loan'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [makeLoan_dto_1.MakeLoanDto]),
+    __metadata("design:paramtypes", [loan_dto_1.LoanDto]),
     __metadata("design:returntype", void 0)
 ], PhysicalBookOperationController.prototype, "loan", null);
 __decorate([

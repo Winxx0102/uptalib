@@ -16,4 +16,6 @@ export class CreateBookDto {
   @IsOptional()
   @IsString({ message: 'Debe ser una cadena de texto' })
   routeimg?: string;
+
+
 }

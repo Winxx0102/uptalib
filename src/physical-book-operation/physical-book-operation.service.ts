@@ -2,6 +2,9 @@ import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nes
 import { CreatePhysicalBookOperationDto } from './dto/create-physical-book-operation.dto';
 import { UpdatePhysicalBookOperationDto } from './dto/update-physical-book-operation.dto';
 import { PrismaService } from 'prisma/prisma.service';
+import { DropDto } from './dto/drop-dto';
+import { EntrieDto } from './dto/entrie-dto';
+import { LoanDto } from './dto/loan-dto';
 
 @Injectable()
 export class PhysicalBookOperationService {
@@ -44,14 +47,14 @@ export class PhysicalBookOperationService {
 
   }
 
-  async addDrops(entriesDto: any) {
+  async addDrops(entriesDto: DropDto) {
     const book = await this.prisma.physicalBook.update({
       where: { id: entriesDto.bookId }, data: {
         availableStock: {
-          decrement: parseInt(entriesDto.quantity)
+          decrement: entriesDto.quantity
         },
         totalStock: {
-          decrement: parseInt(entriesDto.quantity)
+          decrement: entriesDto.quantity
         }
       }
     })
@@ -59,7 +62,7 @@ export class PhysicalBookOperationService {
     await this.prisma.bookOperation.create({
       data: {
         bookId: entriesDto.bookId,
-        quantity: parseInt(entriesDto.quantity),
+        quantity: entriesDto.quantity,
         type: 'BAJA',
         personNames: entriesDto.personNames,
         personSurNames: entriesDto.personSurNames
@@ -70,16 +73,16 @@ export class PhysicalBookOperationService {
     return { status: 'success', message: 'Bajas añadidas' }
   }
 
-  async addEntries(entriesDto: any) {
+  async addEntries(entriesDto: EntrieDto) {
     console.log(entriesDto)
 
     const book = await this.prisma.physicalBook.update({
       where: { id: entriesDto.bookId }, data: {
         availableStock: {
-          increment: parseInt(entriesDto.quantity)
+          increment: entriesDto.quantity
         },
         totalStock: {
-          increment: parseInt(entriesDto.quantity)
+          increment: entriesDto.quantity
         }
       }
     })
@@ -87,7 +90,7 @@ export class PhysicalBookOperationService {
     await this.prisma.bookOperation.create({
       data: {
         bookId: entriesDto.bookId,
-        quantity: parseInt(entriesDto.quantity),
+        quantity: entriesDto.quantity,
         type: 'ENTRADA',
         personNames: entriesDto.personNames,
         personSurNames: entriesDto.personSurNames
@@ -100,7 +103,6 @@ export class PhysicalBookOperationService {
 
 
   //loan related
-
   async findAllLoans(query) {
     const QUERY: any = {}
 
@@ -135,7 +137,7 @@ export class PhysicalBookOperationService {
     return { data, totalPages }
   }
 
-  async settle(id) {
+  async settle(id: string) {
     const existingLoan = await this.prisma.bookOperation.findUnique({ where: { id } })
 
     await this.prisma.bookOperation.create({
@@ -168,7 +170,7 @@ export class PhysicalBookOperationService {
     return { state: 'success', message: 'El libro ha sido devuelto' }
   }
 
-  async loan(makeLoanDto) {
+  async loan(makeLoanDto: LoanDto) {
     return await this.prisma.$transaction(async (tx) => {
 
       const loan = await tx.bookOperation.create({ data: { ...makeLoanDto, type: 'PRESTAMO' } })

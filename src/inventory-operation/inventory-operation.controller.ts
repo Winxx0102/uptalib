@@ -2,6 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { InventoryOperationService } from './inventory-operation.service';
 import { CreateInventoryOperationDto } from './dto/create-inventory-operation.dto';
 import { UpdateInventoryOperationDto } from './dto/update-inventory-operation.dto';
+import { EntrieDto } from './dto/entrie-dto';
+import { DropDto } from './dto/drop-dto';
+import { LoanDto } from './dto/loan-dto';
 
 @Controller('inventory-operation')
 export class InventoryOperationController {
@@ -9,12 +12,12 @@ export class InventoryOperationController {
 
   //entries
   @Patch('entries')
-  addEntries(@Body() entriesDto: any) {
+  addEntries(@Body() entriesDto: EntrieDto) {
     return this.inventoryOperationService.addEntries(entriesDto)
   }
 
   @Patch('drops')
-  addDrops(@Body() entriesDto: any) {
+  addDrops(@Body() entriesDto: DropDto) {
     return this.inventoryOperationService.addDrops(entriesDto)
   }
 
@@ -26,7 +29,7 @@ export class InventoryOperationController {
   }
 
   @Post('loan')
-  loan(@Body() itemLoan: any) {
+  loan(@Body() itemLoan: LoanDto) {
     return this.inventoryOperationService.loan(itemLoan)
   }
 

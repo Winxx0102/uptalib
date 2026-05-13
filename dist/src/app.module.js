@@ -47,8 +47,9 @@ exports.AppModule = AppModule = __decorate([
             physical_book_operation_module_1.PhysicalBookOperationModule,
             item_type_module_1.ItemTypeModule,
             inventory_operation_module_1.InventoryOperationModule,
-            logs_module_1.LogsModule
+            logs_module_1.LogsModule,
         ],
+        providers: [],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

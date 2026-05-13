@@ -1,19 +1,22 @@
 import { CreateInventoryOperationDto } from './dto/create-inventory-operation.dto';
 import { UpdateInventoryOperationDto } from './dto/update-inventory-operation.dto';
 import { PrismaService } from 'prisma/prisma.service';
+import { LoanDto } from './dto/loan-dto';
+import { EntrieDto } from './dto/entrie-dto';
+import { DropDto } from './dto/drop-dto';
 export declare class InventoryOperationService {
     private prisma;
     constructor(prisma: PrismaService);
     create(createInventoryOperationDto: CreateInventoryOperationDto): string;
-    addDrops(entriesDto: any): Promise<{
+    addDrops(entriesDto: DropDto): Promise<{
         status: string;
         message: string;
     }>;
-    addEntries(entriesDto: any): Promise<{
+    addEntries(entriesDto: EntrieDto): Promise<{
         status: string;
         message: string;
     }>;
-    loan(itemLoan: any): Promise<{
+    loan(itemLoan: LoanDto): Promise<{
         status: string;
         message: string;
     }>;
@@ -25,20 +28,19 @@ export declare class InventoryOperationService {
         data: ({
             item: {
                 id: string;
-                name: string;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
+                name: string;
                 code: string | null;
+                description: string | null;
                 totalStock: number;
                 availableStock: number;
-                status: import(".prisma/client").$Enums.ItemStatus;
                 typeId: string;
+                status: import(".prisma/client").$Enums.ItemStatus;
             };
         } & {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
+            itemId: string;
             type: import(".prisma/client").$Enums.OperationType;
             quantity: number;
             observations: string | null;
@@ -46,7 +48,8 @@ export declare class InventoryOperationService {
             wasSettled: boolean | null;
             personNames: string;
             personSurNames: string;
-            itemId: string;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
         totalPages: number;
     }>;
@@ -54,20 +57,19 @@ export declare class InventoryOperationService {
         data: ({
             item: {
                 id: string;
-                name: string;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
+                name: string;
                 code: string | null;
+                description: string | null;
                 totalStock: number;
                 availableStock: number;
-                status: import(".prisma/client").$Enums.ItemStatus;
                 typeId: string;
+                status: import(".prisma/client").$Enums.ItemStatus;
             };
         } & {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
+            itemId: string;
             type: import(".prisma/client").$Enums.OperationType;
             quantity: number;
             observations: string | null;
@@ -75,7 +77,8 @@ export declare class InventoryOperationService {
             wasSettled: boolean | null;
             personNames: string;
             personSurNames: string;
-            itemId: string;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
         totalPages: number;
     }>;

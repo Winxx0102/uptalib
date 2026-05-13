@@ -17,6 +17,9 @@ const common_1 = require("@nestjs/common");
 const inventory_operation_service_1 = require("./inventory-operation.service");
 const create_inventory_operation_dto_1 = require("./dto/create-inventory-operation.dto");
 const update_inventory_operation_dto_1 = require("./dto/update-inventory-operation.dto");
+const entrie_dto_1 = require("./dto/entrie-dto");
+const drop_dto_1 = require("./dto/drop-dto");
+const loan_dto_1 = require("./dto/loan-dto");
 let InventoryOperationController = class InventoryOperationController {
     constructor(inventoryOperationService) {
         this.inventoryOperationService = inventoryOperationService;
@@ -57,14 +60,14 @@ __decorate([
     (0, common_1.Patch)('entries'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [entrie_dto_1.EntrieDto]),
     __metadata("design:returntype", void 0)
 ], InventoryOperationController.prototype, "addEntries", null);
 __decorate([
     (0, common_1.Patch)('drops'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [drop_dto_1.DropDto]),
     __metadata("design:returntype", void 0)
 ], InventoryOperationController.prototype, "addDrops", null);
 __decorate([
@@ -78,7 +81,7 @@ __decorate([
     (0, common_1.Post)('loan'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [loan_dto_1.LoanDto]),
     __metadata("design:returntype", void 0)
 ], InventoryOperationController.prototype, "loan", null);
 __decorate([

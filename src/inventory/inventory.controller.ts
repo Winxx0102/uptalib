@@ -5,6 +5,7 @@ import { EditItemInventory } from './dto/edit-item-dto';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { storageFor1File } from '@/books/utils/storage';
+import { CreateInventoryDto } from './dto/create-inventory.dto';
 @Controller('inventory')
 export class InventoryController {
   constructor(private readonly inventoryService: InventoryService) { }
@@ -13,13 +14,9 @@ export class InventoryController {
 
   @Post()
   @UseInterceptors(FileInterceptor('img', storageFor1File))
-  create(@Body() createInventoryDto: any, @UploadedFile() img: Express.Multer.File) {
+  create(@Body() createInventoryDto: CreateInventoryDto, @UploadedFile() img: Express.Multer.File) {
 
-    createInventoryDto.stock = parseInt(createInventoryDto.stock)
-    if (img) {
-      const imgPath = `/public/uploads/img/${img.filename}`;
-      return this.inventoryService.create({ ...createInventoryDto, routeimg: imgPath });
-    }
+
     return this.inventoryService.create(createInventoryDto);
 
   }

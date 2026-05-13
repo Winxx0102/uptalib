@@ -14,6 +14,9 @@ import { PhysicalBookOperationModule } from './physical-book-operation/physical-
 import { ItemTypeModule } from './item-type/item-type.module';
 import { InventoryOperationModule } from './inventory-operation/inventory-operation.module';
 import { LogsModule } from './logs/logs.module';
+import { SupabaseService } from './supabase/supabase.service';
+import { SupabaseModule } from './supabase/supabase.module';
+import { FilesService } from './files/files.service';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -35,7 +38,9 @@ import { LogsModule } from './logs/logs.module';
     PhysicalBookOperationModule,
     ItemTypeModule,
     InventoryOperationModule,
-    LogsModule
+    LogsModule,
+
   ],
+  providers: [],
 })
 export class AppModule { }
