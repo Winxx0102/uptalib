@@ -24,7 +24,7 @@ export class CreateInventoryDto {
 
     @IsString({ message: 'La descripcion debe ser texto' })
     @IsOptional()
-    @MinLength(200, { message: 'La descripcion debe tener un maximo de 200 caracteres' })
+    @MaxLength(200, { message: 'La descripcion debe tener un maximo de 200 caracteres' })
     description?: string
 
 

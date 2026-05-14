@@ -39,7 +39,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsString)({ message: 'La descripcion debe ser texto' }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MinLength)(200, { message: 'La descripcion debe tener un maximo de 200 caracteres' }),
+    (0, class_validator_1.MaxLength)(200, { message: 'La descripcion debe tener un maximo de 200 caracteres' }),
     __metadata("design:type", String)
 ], CreateInventoryDto.prototype, "description", void 0);
 //# sourceMappingURL=create-inventory.dto.js.map
