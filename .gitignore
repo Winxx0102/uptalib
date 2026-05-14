@@ -1,8 +1,7 @@
 # compiled output
 
 # Logs
-logs
-*.log
+
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
