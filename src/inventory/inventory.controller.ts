@@ -16,7 +16,6 @@ export class InventoryController {
   @UseInterceptors(FileInterceptor('img', storageFor1File))
   create(@Body() createInventoryDto: CreateInventoryDto, @UploadedFile() img: Express.Multer.File) {
 
-
     return this.inventoryService.create(createInventoryDto);
 
   }

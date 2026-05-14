@@ -6,7 +6,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const cookieParser = require('cookie-parser')
-  app.enableCors({ origin: ['http://localhost:3001'], credentials: true })
+  const localConfig = { origin: ['http://localhost:3000'], credentials: true }
+  const isLocal = false
+  app.enableCors(isLocal ? localConfig : {})
   app.use(cookieParser())
 
   app.useGlobalPipes(new ValidationPipe({
